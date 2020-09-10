@@ -1,5 +1,6 @@
 // Grab needed DOM Objects
 var tableBodyEl = document.getElementById("saved-stock-list");
+//var gridContainerEl = document.getElementById("main-content-container");
 
 // Load saved stocks from localStorage and parse to object
 var savedStocks = JSON.parse(localStorage.getItem("stockPortfolio")) || [];
@@ -35,32 +36,40 @@ var getStockInfo = function(reqType, symbol) {
     })
 }
 
-
 // render saved stocks in document
 var renderSavedStocks = async function() {
     // Destroy elements in parent object
+    console.log(savedStocks);
     tableBodyEl.innerHTML = "";
     
-
     // Loop through savedStocks and add as rows to table body
     for (var i = 0; i < savedStocks.length; i++) {
         // Perform fetch api call to get company info by symbol
         var symbol = savedStocks[i].symbol;
         var pricePaid = parseInt(savedStocks[i].pricePaid);
         var bgColor, textColor = "";
-         
+        
         // Lookup stock prices
         var stockQuoteInfo = await getStockInfo("stock-quote", symbol);
         console.log(stockQuoteInfo);
 
-        // Get price differences
+        // Get total price differences
         var totalGain = (stockQuoteInfo.c - pricePaid).toFixed(2);
+        // Check if negative or positive
         if(Math.sign(totalGain) >= 0) {
+            textColor = "green";
+        } else {
+            textColor = "red";
+        }
+
+        // Get days gain from previous close
+        var daysGain = ((stockQuoteInfo.c - stockQuoteInfo.pc) / stockQuoteInfo.pc).toFixed(4);
+        // Check if negative or positive
+        if(Math.sign(daysGain) >= 0) {
             bgColor = "green";
         } else {
             bgColor = "red";
         }
-        var daysGain = ((stockQuoteInfo.c - stockQuoteInfo.pc) / stockQuoteInfo.pc).toFixed(4);
 
         // Create table row
         var stockRowEl = document.createElement("tr");
@@ -73,8 +82,8 @@ var renderSavedStocks = async function() {
                                   "</td>"
                                 + "<td>" + stockQuoteInfo.c.toFixed(2)  + "</td>"
                                 + "<td><span class='days-gain bg-" + bgColor + "'>" + daysGain + "%</span></td>"
-                                + "<td><span class='total-gain text-bold text-green'>" + totalGain + "</span></td>"
-                                + "<td><a class='clear button alert' id='" + savedStocks[i].includedTimestamp + "'>Remove</a></td>";
+                                + "<td><span class='total-gain text-bold text-" + textColor + "'>" + totalGain + "</span></td>"
+                                + "<td><button class='remove-button remove-single' id='" + savedStocks[i].includedTimestamp + "'>Remove</button></td>";
         
         // Append row to body
         tableBodyEl.appendChild(stockRowEl);
@@ -83,38 +92,14 @@ var renderSavedStocks = async function() {
     //console.log(savedStocks);
 }
 
-// Remove all saved stocks
-var removeAllSavedStocks = function() {
-
-}
-
-// Remove saved stock
-var removeSavedStock = function(ts) {
-    // Loop through array of savedStocks and remove the stock with the given timestamp
-    for (var i = 0; i < savedStocks.length; i++) {
-        if(savedStocks[i].includedTimestamp === ts) {
-            // remove stock from array
-        }
-    }
-
-    // Render stocks on page
-    renderSavedStocks();
-}
-
-// Edit existing saved stock
-var editSavedStock = function(ts, newPrice) {
-    
-}
-
-
 // Add new stock to localStorage
 var addStock = function(stock) {
     // Create newStock object to include in savedStocks array
     var newStock = {
-        symbol: "AAPL", // This will need to pull dynamically 
-        corporation: "Apple", // This will need to pull dynamically 
+        symbol: "AMZN", // This will need to pull dynamically 
+        corporation: "Amazon", // This will need to pull dynamically 
         pricePaid: 200, // This will need to pull dynamically 
-        includedTimestamp: 5555555555 // Unix timestamp when added (helps to identify stock to edit)
+        includedTimestamp: 44444444 // Unix timestamp when added (helps to identify stock to edit)
     }
     
     // Add stock to array
@@ -127,34 +112,35 @@ var addStock = function(stock) {
     renderSavedStocks();
 }
 
-
-// View stock details - Opens modal
-var viewStockDetails = function(symbol) {
-
-    // Lookup Company Info
-    getStockInfo("company-info", symbol);
-
-    // Lookup Stock Quote
-    getStockInfo("stock-quote", symbol);
-
-    // Lookup Company Related News
-
-    // Open Modal and Display Content
-
-}
-
-
 // Handle listeners for items clicked
-var clickEventHandler = function(event) {
+/*var handleEventListeners = function(event) {
     event.preventDefault();
 
-    var itemClicked = event.target;
-
-    if(itemClicked.id === "remove-stock") {
-        // remove stock event
-    } else if (itemClicked.id === "edit-stock") {
-        // edit stock
+    var objectClicked = event.target;
+    if(objectClicked.getAttribute("class").includes("remove-single")) {
+        console.log(objectClicked)
     }
 }
+$(document).on("click", '.remove-button', function(event) {
+    event.preventDefault;
+    // Get the id of the remove button clicked
+    var clickButtonId = parseInt($(this).attr("id"));
+    console.log(clickButtonId);
 
-// Event Listeners
+    // Loop through array of savedStocks and remove the stock with the given timestamp
+    for (var i = 0; i < savedStocks.length; i++) {
+        if(savedStocks[i].includedTimestamp === clickButtonId) {
+            // Remove matched stock
+            savedStocks.splice(i,1);
+            // Update local Storage
+            localStorage.setItem("stockPortfolio", JSON.stringify(savedStocks));
+        }
+    }
+
+    // Render stocks on page
+    renderSavedStocks();
+});
+
+gridContainerEl.addEventListener("click", handleEventListeners);*/
+
+
