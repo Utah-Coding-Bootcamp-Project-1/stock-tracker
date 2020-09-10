@@ -6,23 +6,134 @@
     <meta http-equiv="x-ua-compatible" content="ie=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
+
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/foundation-sites@6.6.3/dist/css/foundation.min.css"
         integrity="sha256-ogmFxjqiTMnZhxCqVmcqTvjfe1Y/ec4WaRj/aQPvn+I=" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.1/css/all.css"
+        integrity="sha384-50oBUHEmvpQ+1lW4y57PTFmhCaXp0ML5d60M1M7uH2+nqUivzIebhndOJK28anvf" crossorigin="anonymous" />
+
     <link rel="stylesheet" href="./assets/css/style.css" />
 
-    <title> page title</title>
+    <title>Stock Tracker</title>
 </head>
 
 <body>
-    <h1>Hello, world!</h1>
+
+    <div class="title-bar">
+        <div class="title-bar-left">
+            <h1 class="menu-text">Stock Tracker</h1>
+        </div>
+    </div>
 
 
-    <script src="https://code.jquery.com/jquery-3.5.1.js"
-        integrity="sha256-QWo7LDvxbWT2tbbQ97B53yJnYU3WhH/C8ycbRAkjPDc=" crossorigin="anonymous"></script>
+
+
+
+    <section class="grid-container">
+        <div class="grid-x grid-padding-x">
+
+            <aside class="small-4 cell">
+                <div class="grid-y">
+
+                    <section class="cell">
+                        <h3 class="ml">Search Stocks</h3>
+                        <div class="input-group input-group-rounded">
+                            <input class="input-group-field" type="search" id="searchTerm"
+                                placeholder="Search Stock Ticker...">
+                            <div class="input-group-button">
+                                <button type="submit" class="button" value="Submit" id="searchButton"><i
+                                        class="fas fa-search"></i></button>
+                            </div>
+                        </div>
+                    </section>
+
+                    <section class="cell">
+                        <div class="ml">
+                            <h6>Results</h6>
+                            <ul class="no-bullet">
+                                <li>stock 1</li>
+                                <li>stock 2</li>
+                            </ul>
+
+                        </div>
+                    </section>
+
+                </div>
+            </aside>
+
+            <main class="small-8 cell">
+                <div class="grid-y">
+                    <section class="cell">
+                        <h3 class="ml">My Stocks</h3>
+
+                        <table style="float:right">
+                            <thead>
+                                <tr>
+                                    <th>Ticker</th>
+                                    <th>Corporation</th>
+                                    <th>Price Paid</th>
+                                    <th>Current Price</th>
+                                    <th>Days Gain</th>
+                                    <th>Total Gain</th>
+                                    <th class="remove-button">Clear All</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td class="ticker">MSFT</td>
+                                    <td class="corporation">Microsoft Corporation</td>
+                                    <td class=""><input class="price-paid input-group-field" type="number" value="210.75"></td>
+                                    <td class="current-price">214.25</td>
+                                    <td class=""><span class="days-gain bg-green">+ 0.04%</span></td>
+                                    <td class="total-gain text-bold text-green">3.50</td>
+                                    <td class="remove-button">Remove</td>
+                                </tr>
+                                <tr>
+                                    <td class="ticker">MSFT</td>
+                                    <td class="corporation">Microsoft Corporation</td>
+                                    <td class=""><input class="price-paid input-group-field" type="number" value="210.75"></td>
+                                    <td class="current-price">214.25</td>
+                                    <td class=""><span class="days-gain bg-red">- 0.04%</span></td>
+                                    <td class="total-gain text-bold text-red">-3.50</td>
+                                    <td class="remove-button">Remove</td>
+                                </tr>
+                            </tbody>
+                        </table>
+
+                    </section>
+                </div>
+            </main>
+        </div>
+    </section>
+
+
+
+
+
+
+    <!-- <div class="grid-x">
+        <div class="small-6 cell">6 cells</div>
+        <div class="small-6 cell">6 cells</div>
+    </div>
+    <div class="grid-x">
+        <div class="medium-6 large-4 cell">12/6/4 cells</div>
+        <div class="medium-6 large-8 cell">12/6/8 cells</div>
+    </div> -->
+
+
+
+
+
+
+    <script src="https://code.jquery.com/jquery-3.5.1.min.js"
+        integrity="sha256-9/aliU8dGd2tb6OSsuzixeV4y/faTqgFtohetphbbj0=" crossorigin="anonymous"></script>
     <script src="https://cdn.jsdelivr.net/npm/what-input@5.2.10/dist/what-input.min.js"
         integrity="sha256-ZLjSztVkz5q3lKFjN9AgL6qR7TGLE+qnTXnNNTWtMF4=" crossorigin="anonymous"></script>
+    <!-- Compressed JavaScript -->
     <script src="https://cdn.jsdelivr.net/npm/foundation-sites@6.6.3/dist/js/foundation.min.js"
         integrity="sha256-pRF3zifJRA9jXGv++b06qwtSqX1byFQOLjqa2PTEb2o=" crossorigin="anonymous"></script>
+
+    <script src="./assets/js/script.js"></script>
 
 </body>
 
