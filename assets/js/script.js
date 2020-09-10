@@ -1,6 +1,5 @@
 // Grab needed DOM Objects
 var tableBodyEl = document.getElementById("saved-stock-list");
-//var gridContainerEl = document.getElementById("main-content-container");
 
 // Load saved stocks from localStorage and parse to object
 var savedStocks = JSON.parse(localStorage.getItem("stockPortfolio")) || [];
@@ -18,16 +17,12 @@ var getStockInfo = function(reqType, symbol) {
         fetch(url + "?symbol=" + symbol + "&token=btc3din48v6p15lfr1ag")
         .then(function(result) {
             if (result.ok) {
-                return result.json();
+                resolve(result.json());
             } else {
                 // How do we warn the user?
                 // Display message on view somewhere?
                 reject("error");
             }
-        })
-        .then(function(result) {
-            // return result
-            resolve(result);
         })
         .catch(function(error) {
             // NEED A WAY TO LET THE USER KNOW WITHOUT ALERTS, PROMPTS, or LOGS
@@ -39,7 +34,6 @@ var getStockInfo = function(reqType, symbol) {
 // render saved stocks in document
 var renderSavedStocks = async function() {
     // Destroy elements in parent object
-    console.log(savedStocks);
     tableBodyEl.innerHTML = "";
     
     // Loop through savedStocks and add as rows to table body
@@ -51,7 +45,6 @@ var renderSavedStocks = async function() {
         
         // Lookup stock prices
         var stockQuoteInfo = await getStockInfo("stock-quote", symbol);
-        console.log(stockQuoteInfo);
 
         // Get total price differences
         var totalGain = (stockQuoteInfo.c - pricePaid).toFixed(2);
@@ -88,18 +81,16 @@ var renderSavedStocks = async function() {
         // Append row to body
         tableBodyEl.appendChild(stockRowEl);
     }
-    
-    //console.log(savedStocks);
 }
 
 // Add new stock to localStorage
 var addStock = function(stock) {
     // Create newStock object to include in savedStocks array
     var newStock = {
-        symbol: "AMZN", // This will need to pull dynamically 
-        corporation: "Amazon", // This will need to pull dynamically 
-        pricePaid: 200, // This will need to pull dynamically 
-        includedTimestamp: 44444444 // Unix timestamp when added (helps to identify stock to edit)
+        symbol: "MSFT", // This will need to pull dynamically 
+        corporation: "Microsoft", // This will need to pull dynamically 
+        pricePaid: 74, // This will need to pull dynamically 
+        includedTimestamp: 1111111// Unix timestamp when added (helps to identify stock to edit)
     }
     
     // Add stock to array
@@ -112,35 +103,5 @@ var addStock = function(stock) {
     renderSavedStocks();
 }
 
-// Handle listeners for items clicked
-/*var handleEventListeners = function(event) {
-    event.preventDefault();
-
-    var objectClicked = event.target;
-    if(objectClicked.getAttribute("class").includes("remove-single")) {
-        console.log(objectClicked)
-    }
-}
-$(document).on("click", '.remove-button', function(event) {
-    event.preventDefault;
-    // Get the id of the remove button clicked
-    var clickButtonId = parseInt($(this).attr("id"));
-    console.log(clickButtonId);
-
-    // Loop through array of savedStocks and remove the stock with the given timestamp
-    for (var i = 0; i < savedStocks.length; i++) {
-        if(savedStocks[i].includedTimestamp === clickButtonId) {
-            // Remove matched stock
-            savedStocks.splice(i,1);
-            // Update local Storage
-            localStorage.setItem("stockPortfolio", JSON.stringify(savedStocks));
-        }
-    }
-
-    // Render stocks on page
-    renderSavedStocks();
-});
-
-gridContainerEl.addEventListener("click", handleEventListeners);*/
 
 
