@@ -94,17 +94,6 @@ var renderSavedStocks = async function () {
 
         // Add row contents
         stockRowEl.innerHTML = "<td>" + symbol + "</td>"
-<<<<<<< HEAD
-            + "<td>" + savedStocks[i].corporation + "</td>"
-            + "<td>" +
-            "<input class='price-paid input-group-field' type='number' value=" + pricePaid.toFixed(2) + ">" +
-            "</td>"
-            + "<td>" + stockQuoteInfo.c.toFixed(2) + "</td>"
-            + "<td><span class='days-gain bg-" + bgColor + "'>" + daysGain + "%</span></td>"
-            + "<td><span class='total-gain text-bold text-" + textColor + "'>" + totalGain + "</span></td>"
-            + "<td><button class='remove-button remove-single' id='" + savedStocks[i].includedTimestamp + "'>Remove</button></td>";
-
-=======
                                 + "<td>" + savedStocks[i].corporation + "</td>"
                                 + "<td>" + 
                                    "<input class='price-paid input-group-field' type='number' value=" + pricePaid.toFixed(2) +">" + 
@@ -114,7 +103,6 @@ var renderSavedStocks = async function () {
                                 + "<td><span class='total-gain text-bold text-" + textColor + "'>" + totalGain + "</span></td>"
                                 + "<td><button class='remove-button remove-single' id='" + savedStocks[i].includedTimestamp + "'>Remove</button></td>";
         
->>>>>>> feature/remove-stocks
         // Append row to body
         tableBodyEl.appendChild(stockRowEl);
     }
