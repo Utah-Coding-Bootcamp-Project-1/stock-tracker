@@ -41,6 +41,11 @@ header {
 
 table {
   font-weight: bold;
+  float:right
+}
+
+ul {
+  list-style-type: none;
 }
 
 thead {
@@ -87,7 +92,7 @@ tbody tr {
   font-weight: bold;
 }
 
-.blue {
+.bg-blue {
   background-color: skyblue;
 }
 
@@ -112,10 +117,14 @@ tbody tr {
 }
 
 .title-bar {
-  padding: 8px 0 0 3rem;
+  padding: 8px 0 8px 3rem;
   margin-bottom: 25px;
   color: white;
   background-color: var(--color-1);
+}
+
+.row {
+  margin-bottom: 20px;
 }
 
 h1 {
@@ -132,6 +141,7 @@ h3 {
 h6 {
   font-size: 15px;
   font-weight: bold;
+  margin: 0;
 }
 
 i {
@@ -148,6 +158,10 @@ i {
 
 .ml {
   margin-left: 1rem;
+}
+
+.ml-2 {
+  margin-left: 2rem;
 }
 
 .remove-button {
