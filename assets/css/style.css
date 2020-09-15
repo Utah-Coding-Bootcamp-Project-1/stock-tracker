@@ -7,41 +7,9 @@
   --color-6: #1C2A25;
 }
 
-* {
-  /* margin: 0;
-    padding: 0;
-    box-sizing: border-box; */
-}
-
-html {
-  /* border-box box model allows us to add padding and border to our elements without increasing their size */
-  /* box-sizing: border-box;
-  font-family: 'Fira Sans', sans-serif;
-  font-weight: 600;
-  font-size: 10px;
-  color: black; */
-  /*  text-shadow: 0 2px 0 rgba(122, 59, 59, 0.07);*/
-}
-
-/*body rules start*/
-/*Header rules start*/
-header {
-  /* top: 0;
-  background-color: var(--color-1);
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  flex-wrap: wrap;
-  background-size: cover;
-  background-position: center;
-  background-attachment: fixed;
-  z-index: 9999;
-  min-height: 70px; */
-}
-
 table {
   font-weight: bold;
-  float:right
+  float: right
 }
 
 ul {
@@ -123,8 +91,18 @@ tbody tr {
   background-color: var(--color-1);
 }
 
-.row {
+.mb {
   margin-bottom: 20px;
+}
+
+.pv-0 {
+  padding-top: 0px !important;
+  padding-bottom: 0px !important; 
+}
+
+.pv-05 {
+  padding-top: .5rem !important;
+  padding-bottom: .5rem !important; 
 }
 
 h1 {
@@ -179,4 +157,9 @@ i {
   font-size: 1.2rem;
   padding: 0 .5em;
 }
-/*# sourceMappingURL=style.css.map */
+
+
+.centerButton {
+  text-align: center;
+  /* margin: 0 auto; */
+}
