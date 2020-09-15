@@ -1,0 +1,207 @@
+:root {
+    --color-1: #8C71D8;
+    --color-2: #59C164;
+    --color-3: #EB7072;
+    --color-4: #84918D;
+    --color-5: #E0EAEA;
+    --color-6: #1C2A25;
+}
+
+* {
+    /* margin: 0;
+    padding: 0;
+    box-sizing: border-box; */
+}
+
+html {
+    /* border-box box model allows us to add padding and border to our elements without increasing their size */
+    /* box-sizing: border-box;
+  font-family: 'Fira Sans', sans-serif;
+  font-weight: 600;
+  font-size: 10px;
+  color: black; */
+    /*  text-shadow: 0 2px 0 rgba(122, 59, 59, 0.07);*/
+}
+
+/*body rules start*/
+body {}
+
+/*Header rules start*/
+header {
+    /* top: 0;
+  background-color: var(--color-1);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  background-size: cover;
+  background-position: center;
+  background-attachment: fixed;
+  z-index: 9999;
+  min-height: 70px; */
+}
+
+
+// table classes
+table {
+    font-weight: bold;
+    
+    
+}
+
+thead {
+    border-style: none;
+    font-size: 15px;
+    background-color: transparent;
+}
+
+tbody {
+    border-style: none;
+    font-weight: normal;
+    color: gray;
+    background-color: transparent;
+}
+
+tbody tr {
+    border-bottom-style: solid;
+    border-color: gray;
+    border-width: 1px;
+}
+
+.ticker {
+    font-weight: bold;
+}
+
+.corporation {
+    
+}
+
+.price-paid {
+    color: gray;
+    display: block;
+    border-style: solid;
+    border-width: 1px;
+    border-color: gray;
+    border-radius: 10px;
+    height: 2rem;
+    width: 90px;
+}
+
+.current-price {
+
+}
+
+.days-gain {
+    font-weight: bold;
+    color: white;
+    padding: 5px 10px;
+}
+
+.total-gain {
+    font-weight: bold;
+}
+
+// end of table classes
+
+
+
+
+
+
+
+
+
+
+// for testing use
+.blue {
+    background-color: skyblue;
+}
+
+.text-bold {
+    font-weight: bold;
+}
+
+
+
+
+
+
+.bg-green {
+    background-color: var(--color-2);
+}
+
+.bg-red {
+    background-color: var(--color-3);
+}
+
+.text-green {
+    color: var(--color-2);
+}
+
+.text-red {
+    color: var(--color-3);
+}
+
+
+.title-bar {
+    padding: 8px 0 0 3rem;
+    margin-bottom: 25px;
+    color: white;
+    background-color: var(--color-1);
+}
+
+h1 {
+    font-size: 22px;
+    font-weight: bold;
+}
+
+h3 {
+    font-size: 20px;
+    font-weight: bold;
+    color: rgb(89, 89, 89);
+}
+
+h6 {
+    font-size: 15px;
+    font-weight: bold;
+}
+
+i {
+    color: white;
+}
+
+#searchButton {
+    background-color: var(--color-1);
+}
+
+#searchTerm {
+    font-weight: bold;
+}
+
+.ml {
+    margin-left: 1rem;
+}
+
+.remove-button {
+    font-weight: initial;
+    color: red;
+}
+
+
+
+
+
+
+
+.input-group-rounded {
+    .input-group-field {
+        border-radius: 10px 0 0 10px;
+        padding-left: 1rem;
+    }
+
+    .input-group-button .button {
+        border-radius: 0 10px 10px 0;
+        font-size: 1.2rem;
+        padding: 0 .5em;
+    }
+}
