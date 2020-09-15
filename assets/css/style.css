@@ -157,7 +157,7 @@ i {
 }
 
 .ml {
-  margin-left: 1rem;
+  margin-left: 1rem !important;
 }
 
 .ml-2 {
