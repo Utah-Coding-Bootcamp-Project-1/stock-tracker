@@ -9,7 +9,7 @@
 
 table {
   font-weight: bold;
-  float:right
+  float: right
 }
 
 ul {
@@ -91,8 +91,18 @@ tbody tr {
   background-color: var(--color-1);
 }
 
-.row {
+.mb {
   margin-bottom: 20px;
+}
+
+.pv-0 {
+  padding-top: 0px !important;
+  padding-bottom: 0px !important; 
+}
+
+.pv-05 {
+  padding-top: .5rem !important;
+  padding-bottom: .5rem !important; 
 }
 
 h1 {
@@ -147,4 +157,15 @@ i {
   font-size: 1.2rem;
   padding: 0 .5em;
 }
-/*# sourceMappingURL=style.css.map */
+
+
+.centerButton {
+  text-align: center;
+  /* margin: 0 auto; */
+}
+
+/* MODAL */
+
+.article {
+  text-align: center;
+}
