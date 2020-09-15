@@ -10,6 +10,7 @@ var getStockInfo = function(reqType, symbol) {
     if(reqType === "company-info") {
         var url = "https://finnhub.io/api/v1/stock/profile2"; // Company information
     } else {
+        // stock-quote
         var url = "https://finnhub.io/api/v1/quote"; // Stock quote details
     }
     // Perform fetch api call to get company info by symbol
@@ -29,6 +30,27 @@ var getStockInfo = function(reqType, symbol) {
             reject("error");
         });
     })
+}
+
+// Search for related news articles
+var getRelatedArticles = function(searchTerm) {
+    //var url = proxyUrl + "https://cors-anywhere.herokuapp.com/https://newsapi.org/v2/top-headlines?q=" + searchTerm + "&apiKey=92bae84730364e2c976c27872f8a9fa5";
+    var url = "https://gnews.io/api/v4/search?max=5&lang=en&q=" + searchTerm + "&token=0efe5784f39c90ff76da20274ced077a";
+    
+    return new Promise(function(resolve, reject) {
+        fetch(url)
+        .then(function(result) {
+            if (result.ok) {
+                
+                resolve(result.json());
+            } else {
+                reject("error");
+            }
+        })
+        .catch(function(error) {
+            reject("error");
+        });
+    });
 }
 
 // render saved stocks in document
@@ -104,4 +126,24 @@ var addStock = function(stock) {
 }
 
 
+// Open stock details modal
+var viewStockDetails = async function(symbol) {
+    // Show modal
+    $('.ui.modal').modal('show');
 
+    // retrieve company name
+    var compInfo = await getStockInfo("company-info", symbol);
+    console.log(compInfo);
+    
+    // replace white space with '+' to use in related article api call
+    var companyName = compInfo.name.split(' ').join('+');
+    console.log(companyName);
+
+    // retrieve stock quote
+    var stockQuote = await getStockInfo("stock-quote", symbol);
+    console.log(stockQuote);
+    
+    // retrieve related news articles
+    var relatedArticles = await getRelatedArticles(companyName); // compInfo.name
+    console.log(relatedArticles);
+}
