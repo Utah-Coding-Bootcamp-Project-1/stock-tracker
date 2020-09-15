@@ -96,7 +96,7 @@ var renderSavedStocks = async function() {
                                    "<input class='price-paid input-group-field' type='number' value=" + pricePaid.toFixed(2) +">" + 
                                   "</td>"
                                 + "<td>" + stockQuoteInfo.c.toFixed(2)  + "</td>"
-                                + "<td><span class='days-gain bg-" + bgColor + "'>" + daysGain + "%</span></td>"
+                                + "<td class='" + bgColor + "'><span class='days-gain'>" + daysGain + "%</span></td>"
                                 + "<td><span class='total-gain text-bold text-" + textColor + "'>" + totalGain + "</span></td>"
                                 + "<td><button class='remove-button remove-single' id='" + savedStocks[i].includedTimestamp + "'>Remove</button></td>";
         
@@ -112,7 +112,7 @@ var addStock = function(stock) {
         symbol: "MSFT", // This will need to pull dynamically 
         corporation: "Microsoft", // This will need to pull dynamically 
         pricePaid: 74, // This will need to pull dynamically 
-        includedTimestamp: 1111111// Unix timestamp when added (helps to identify stock to edit)
+        id: savedStocks.length
     }
     
     // Add stock to array
@@ -125,6 +125,28 @@ var addStock = function(stock) {
     renderSavedStocks();
 }
 
+// Remove all stocks from saved list
+var removeAllStocks = function() {
+    // set savedStocks to empty array
+    savedStocks = [];
+
+    // Update localStorage to new array of stocks
+    localStorage.setItem("stockPortfolio", JSON.stringify(savedStocks));
+}
+
+// Remove single stock from saved list
+var removeSingleStock = function(stockID) {
+    // Remove stock from array
+    savedStocks.splice(stockID, 1);
+
+    // Loop through and reassign id
+    for (var i = 0; i < savedStocks.length; i++) {
+        savedStocks[i].id = i;
+    }
+
+    // Update localStorage to new array of stocks
+    localStorage.setItem("stockPortfolio", JSON.stringify(savedStocks));
+}
 
 // Open stock details modal
 var viewStockDetails = async function(symbol) {
