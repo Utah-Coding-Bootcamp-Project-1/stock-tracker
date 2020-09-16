@@ -144,7 +144,14 @@ i {
 
 .remove-button {
   font-weight: initial;
-  color: red;
+  color: #FF0000;
+  border: none;
+  background-color: transparent;
+  outline:none;
+}
+.remove-button:hover {
+  cursor: pointer;
+  color: 	#B22222;
 }
 
 .input-group-rounded .input-group-field {
