@@ -180,7 +180,6 @@ var viewStockDetails = async function (symbol) {
 
     // retrieve company name
     var compInfo = await getStockInfo("company-info", symbol);
-    console.log(compInfo);
 
     // display company name in modal
     tickerName.innerText = compInfo['name'] + " (" + compInfo['ticker'] + ")";
@@ -192,7 +191,6 @@ var viewStockDetails = async function (symbol) {
 
     // retrieve stock quote
     var stockQuote = await getStockInfo("stock-quote", symbol);
-    console.log(stockQuote);
 
     // put ticker values into table
     tickerCost.innerText = stockQuote['c'];
@@ -204,6 +202,18 @@ var viewStockDetails = async function (symbol) {
     // retrieve related news articles
     var relatedArticles = await getRelatedArticles(companyName); // compInfo.name
     console.log(relatedArticles);
+
+    // display new image
+    for (i=0; i < 3; i++) {
+        modalImages.innerHTML = modalImages.innerHTML + '<img src= "' + relatedArticles.articles[i].image + '" width = 300>'
+    };
+
+
+    //display article links 
+    for (i=0; i < 3; i++) {
+        modalArticles.innerHTML = modalArticles.innerHTML + "<a href='" + relatedArticles.articles[i].url +"' target='blank'>" + relatedArticles.articles[i].description + "</a>";
+        console.log(modalArticles)
+    };
 }
 
 // get value in search field when the search button/return is used
@@ -213,7 +223,6 @@ function formSubmitHandler(event) {
 
     //get value from search field and trim it
     var searchTerm = searchInputEl.value.trim();
-    console.log(searchTerm);
 
     //call function to get info from api and display it in modal
     viewStockDetails(searchTerm);
