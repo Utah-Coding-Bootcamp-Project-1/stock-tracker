@@ -42,7 +42,7 @@
                     </form>
                 </section>
 
-                <section class="ml-2 row mb">
+                <!--<section class="ml-2 row mb">
 
                     <h6>Results</h6>
                     <div class="ui list">
@@ -50,7 +50,7 @@
                         <div class="item">stock 2</div>
                     </div>
 
-                </section>
+                </section>-->
 
             </aside>
 
@@ -59,7 +59,7 @@
                 <section class="row mb">
                     <h3 class="ml">My Stocks</h3>
 
-                    <table class="ui celled table">
+                    <table class="ui celled table" id="saved-stock-table">
                         <thead>
                             <tr>
                                 <th>Ticker</th>
@@ -68,7 +68,7 @@
                                 <th>Current Price</th>
                                 <th>Days Gain</th>
                                 <th>Total Gain</th>
-                                <th><span class="remove-button">Clear All</span></th>
+                                <th><span class="remove-button" id="clear-all">Clear All</span></th>
                             </tr>
                         </thead>
                         <tbody id="saved-stock-list">
@@ -96,6 +96,7 @@
                             </tr>
                         </tbody>
                     </table>
+                    
 
                 </section>
 

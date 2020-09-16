@@ -1,5 +1,5 @@
 // Grab needed DOM Objects
-var tableBodyEl = document.getElementById("saved-stock-list");
+var tableEl = document.getElementById("saved-stock-table");
 var searchInputEl = document.getElementById('searchTerm');
 var searchFormEl = document.getElementById('searchForm');
 var tickerName = document.getElementById('modal-ticker-name')
@@ -10,6 +10,7 @@ var tickerOpen = document.getElementById('open')
 var tickerClose = document.getElementById('close')
 var modalImages = document.getElementById('modal-images')
 var modalArticles = document.getElementById('modal-articles')
+var tableBodyEl = document.getElementById("saved-stock-list");
 
 // Load saved stocks from localStorage and parse to object
 var savedStocks = JSON.parse(localStorage.getItem("stockPortfolio")) || [];
@@ -98,6 +99,7 @@ var renderSavedStocks = async function () {
 
         // Create table row
         var stockRowEl = document.createElement("tr");
+        stockRowEl.id = "stock-" + savedStocks[i].timestampAdded;
 
         // Add row contents
         stockRowEl.innerHTML = "<td>" + symbol + "</td>"
@@ -106,9 +108,9 @@ var renderSavedStocks = async function () {
                                    "<input class='price-paid input-group-field' type='number' value=" + pricePaid.toFixed(2) +">" + 
                                   "</td>"
                                 + "<td>" + stockQuoteInfo.c.toFixed(2)  + "</td>"
-                                + "<td class='" + bgColor + "'><span class='days-gain'>" + daysGain + "%</span></td>"
+                                + "<td class='bg-" + bgColor + "'><span class='days-gain'>" + daysGain + "%</span></td>"
                                 + "<td><span class='total-gain text-bold text-" + textColor + "'>" + totalGain + "</span></td>"
-                                + "<td><button class='remove-button remove-single' id='" + savedStocks[i].includedTimestamp + "'>Remove</button></td>";
+                                + "<td><button class='remove-button remove-single' id='" + savedStocks[i].timestampAdded + "'>Remove</button></td>";
         
         // Append row to body
         tableBodyEl.appendChild(stockRowEl);
@@ -119,10 +121,10 @@ var renderSavedStocks = async function () {
 var addStock = function (stock) {
     // Create newStock object to include in savedStocks array
     var newStock = {
-        symbol: "MSFT", // This will need to pull dynamically 
+        symbol: stock, // This will need to pull dynamically 
         corporation: "Microsoft", // This will need to pull dynamically 
         pricePaid: 74, // This will need to pull dynamically 
-        id: savedStocks.length
+        timestampAdded: Date.now()
     }
 
     // Add stock to array
@@ -142,16 +144,29 @@ var removeAllStocks = function() {
 
     // Update localStorage to new array of stocks
     localStorage.setItem("stockPortfolio", JSON.stringify(savedStocks));
+
+    // Render Saved Stocks
+    renderSavedStocks();
 }
 
 // Remove single stock from saved list
 var removeSingleStock = function(stockID) {
-    // Remove stock from array
-    savedStocks.splice(stockID, 1);
+    // Remove stock row from table
+    document.getElementById("stock-" + stockID).remove();
+    var removeStock = -1;
 
-    // Loop through and reassign id
+    // Loop through and grab index of stock to remove
     for (var i = 0; i < savedStocks.length; i++) {
-        savedStocks[i].id = i;
+        if (savedStocks[i].timestampAdded == stockID) {
+            // Add stock to new array
+            removeStock = i;
+        } 
+    }
+    console.log(removeStock);
+
+    // Remove stock from array
+    if(removeStock >= 0) {
+        savedStocks.splice(removeStock, 1);
     }
 
     // Update localStorage to new array of stocks
@@ -172,6 +187,7 @@ var viewStockDetails = async function (symbol) {
 
     // replace white space with '+' to use in related article api call
     var companyName = compInfo.name.split(' ').join('+');
+    companyName = companyName.replace(".", "");
     console.log(companyName);
 
     // retrieve stock quote
@@ -203,5 +219,23 @@ function formSubmitHandler(event) {
     viewStockDetails(searchTerm);
 }
 
+// Remove stock handler function
+var removeStockHandler = function(event) {
+    //prevent refreshing page
+    event.preventDefault();
 
+    // Grab clicked target
+    var clickedItem = event.target;
+
+    // perform function based on target clicked
+    if (clickedItem.className.includes("remove-single")) {
+        // Remove Single Stock
+        removeSingleStock(clickedItem.id);
+    } else if (clickedItem.id === "clear-all") {
+        // Remove all stocks
+        removeAllStocks();
+    }
+}
+
+tableEl.addEventListener("click", removeStockHandler);
 searchFormEl.addEventListener("submit", formSubmitHandler);
