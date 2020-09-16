@@ -2,7 +2,14 @@
 var tableBodyEl = document.getElementById("saved-stock-list");
 var searchInputEl = document.getElementById('searchTerm');
 var searchFormEl = document.getElementById('searchForm');
-
+var tickerName = document.getElementById('modal-ticker-name')
+var tickerCost = document.getElementById('cost')
+var tickerHigh = document.getElementById('high')
+var tickerLow = document.getElementById('low')
+var tickerOpen = document.getElementById('open')
+var tickerClose = document.getElementById('close')
+var modalImages = document.getElementById('modal-images')
+var modalArticles = document.getElementById('modal-articles')
 
 // Load saved stocks from localStorage and parse to object
 var savedStocks = JSON.parse(localStorage.getItem("stockPortfolio")) || [];
@@ -160,6 +167,9 @@ var viewStockDetails = async function (symbol) {
     var compInfo = await getStockInfo("company-info", symbol);
     console.log(compInfo);
 
+    // display company name in modal
+    tickerName.innerText = compInfo['name'] + " (" + compInfo['ticker'] + ")";
+
     // replace white space with '+' to use in related article api call
     var companyName = compInfo.name.split(' ').join('+');
     console.log(companyName);
@@ -167,6 +177,13 @@ var viewStockDetails = async function (symbol) {
     // retrieve stock quote
     var stockQuote = await getStockInfo("stock-quote", symbol);
     console.log(stockQuote);
+
+    // put ticker values into table
+    tickerCost.innerText = stockQuote['c'];
+    tickerHigh.innerText = stockQuote['h'];
+    tickerLow.innerText = stockQuote['l'];
+    tickerOpen.innerText = stockQuote['o'];
+    tickerClose.innerText = stockQuote['pc'];
 
     // retrieve related news articles
     var relatedArticles = await getRelatedArticles(companyName); // compInfo.name
@@ -185,8 +202,6 @@ function formSubmitHandler(event) {
     //call function to get info from api and display it in modal
     viewStockDetails(searchTerm);
 }
-
-
 
 
 searchFormEl.addEventListener("submit", formSubmitHandler);
