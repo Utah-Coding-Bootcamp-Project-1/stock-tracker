@@ -204,7 +204,7 @@ var viewStockDetails = async function (symbol) {
 
     // replace white space with '+' to use in related article api call
     var companyName = compInfo.name.split(' ').join('+');
-    companyName = companyName.replace(".", "");
+    companyName = companyName.replace(".", "+");
 
     // retrieve stock quote
     var stockQuote = await getStockInfo("stock-quote", symbol);
