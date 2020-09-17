@@ -187,7 +187,6 @@ var viewStockDetails = async function (symbol) {
     // replace white space with '+' to use in related article api call
     var companyName = compInfo.name.split(' ').join('+');
     companyName = companyName.replace(".", "");
-    console.log(companyName);
 
     // retrieve stock quote
     var stockQuote = await getStockInfo("stock-quote", symbol);
@@ -201,18 +200,18 @@ var viewStockDetails = async function (symbol) {
 
     // retrieve related news articles
     var relatedArticles = await getRelatedArticles(companyName); // compInfo.name
-    console.log(relatedArticles);
 
     // display new image
     for (i=0; i < 3; i++) {
-        modalImages.innerHTML = modalImages.innerHTML + '<img src= "' + relatedArticles.articles[i].image + '" width = 300>'
+        var modalImageChild = document.createElement("div");
+        modalImageChild = modalImageChild.innerHTML + '<img src= "' + relatedArticles.articles[i].image + '" width = 300>';
+        modalImageChild.appendChild(modalImages);
     };
 
 
     //display article links 
     for (i=0; i < 3; i++) {
         modalArticles.innerHTML = modalArticles.innerHTML + "<a href='" + relatedArticles.articles[i].url +"' target='blank'>" + relatedArticles.articles[i].description + "</a>";
-        console.log(modalArticles)
     };
 }
 
