@@ -2,19 +2,12 @@
 var tableEl = document.getElementById('saved-stock-table');
 var searchInputEl = document.getElementById('searchTerm');
 var searchFormEl = document.getElementById('searchForm');
-var addButtonEl = document.getElementById('addButton')
-var closeButtonEl = document.getElementById('closeButton')
-
-
-var tickerName = document.getElementById('modal-ticker-name')
-var tickerCost = document.getElementById('cost')
-var tickerHigh = document.getElementById('high')
-var tickerLow = document.getElementById('low')
-var tickerOpen = document.getElementById('open')
-var tickerClose = document.getElementById('close')
-var modalImages = document.getElementById('modal-images')
-var modalArticles = document.getElementById('modal-articles')
-var tableBodyEl = document.getElementById("saved-stock-list");
+var tickerName = document.getElementById('modal-ticker-name');
+var tickerCost = document.getElementById('cost');
+var tickerHigh = document.getElementById('high');
+var tickerLow = document.getElementById('low');
+var tickerOpen = document.getElementById('open');
+var tickerClose = document.getElementById('close');
 
 // Load saved stocks from localStorage and parse to object
 var savedStocks = JSON.parse(localStorage.getItem("stockPortfolio")) || [];
@@ -211,18 +204,29 @@ var viewStockDetails = async function (symbol) {
     // retrieve related news articles
     var relatedArticles = await getRelatedArticles(companyName); // compInfo.name
 
-    // display new image
-    for (i = 0; i < 3; i++) {
-        modalImages.innerHTML = modalImages.innerHTML + '<img src= "' + relatedArticles.articles[i].image + '" width = 300>'
-    };
+    // display articles and images
+    var modalNews = document.getElementById('modal-news');
+    modalNews.innerHTML = "";
 
+    for (i=0; i < 3; i++) {
+        var modalNewsRow = document.createElement("section")
+        modalNewsRow.className = "row middle aligned";
 
-    //display article links 
-    for (i = 0; i < 3; i++) {
-        modalArticles.innerHTML = modalArticles.innerHTML + "<a href='" + relatedArticles.articles[i].url + "' target='blank'>" + relatedArticles.articles[i].description + "</a>";
-        console.log(modalArticles)
+        var modalNewsImg = document.createElement("section");
+        modalNewsImg.className = "six wide column";
+        modalNewsImg.innerHTML ='<img src= "' + relatedArticles.articles[i].image + '" width = 300>';
+    
+        var modalNewsArticle = document.createElement("section");
+        modalNewsArticle.className = "ten wide column";
+        modalNewsArticle.innerHTML ='<a href="' + relatedArticles.articles[i].url + 'target="blank">' + relatedArticles.articles[i].description + '</a>';
+        
+        modalNewsRow.appendChild(modalNewsImg);
+        modalNewsRow.appendChild(modalNewsArticle);
+
+        modalNews.appendChild(modalNewsRow);
     };
-}
+    console.log(modalNews);
+};
 
 // get value in search field when the search button/return is used
 function formSubmitHandler(event) {

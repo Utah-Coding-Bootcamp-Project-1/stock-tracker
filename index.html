@@ -95,9 +95,10 @@
         </div>
     </section>
 
+    <!-- Modal -->
     <div class="ui fullscreen modal">
 
-        <div class="header ui grid  pv-05">
+        <div class="header ui padded grid  pv-05">
             <div class="three column row pv-0">
                 <div class="column modal-header" id="modal-ticker-name">
                     <span class="" id="modal-ticker-name"></span>
@@ -113,8 +114,8 @@
 
 
 
-        <div class="ui grid">
-            <section class="nine wide column">
+        <div class="ui stackable padded grid">
+            <section class="eight wide column">
                 <table class="ui celled table">
                     <tr>
                         <td>Cost</td>
@@ -138,12 +139,8 @@
                     </tr>
                 </table>
             </section>
-            <section class="seven wide column">
-                <div class="ui grid">
-                    <section id="modal-images" class="nine wide column">
-                    </section>
-                    <section id="modal-articles" class="six wide column">
-                    </section>
+            <section class="eight wide column">
+                <div id="modal-news" class="ui celled stackable padded grid modal-news">
                 </div>
             </section>
         </div>
