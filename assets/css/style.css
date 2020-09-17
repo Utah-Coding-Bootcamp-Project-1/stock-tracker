@@ -7,6 +7,11 @@
   --color-6: #1C2A25;
 }
 
+* {
+  margin: 0;
+  padding: 0;
+}
+
 table {
   font-weight: bold;
   float: right
@@ -34,7 +39,10 @@ tbody tr {
   border-color: gray;
   border-width: 1px;
 }
-
+.main-content-container {
+  max-width: 1400px;
+  margin: 0 auto;
+}
 .ticker {
   font-weight: bold;
 }
@@ -179,4 +187,14 @@ i {
 
 .hidden {
   visibility: hidden;
+}
+
+@media only screen and (max-width: 990px) {
+  .ui.grid>.stackable.stackable.row>.column, .ui.stackable.grid>.column.grid>.column, .ui.stackable.grid>.column.row>.column, .ui.stackable.grid>.column:not(.row), .ui.stackable.grid>.row>.column, .ui.stackable.grid>.row>.wide.column, .ui.stackable.grid>.wide.column {
+    width: 100%!important;
+    margin: 0 0!important;
+    -webkit-box-shadow: none!important;
+    box-shadow: none!important;
+    padding: 1rem 1rem!important;
+  }
 }
