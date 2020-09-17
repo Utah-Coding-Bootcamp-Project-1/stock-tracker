@@ -1,7 +1,11 @@
 // Grab needed DOM Objects
-var tableEl = document.getElementById("saved-stock-table");
+var tableEl = document.getElementById('saved-stock-table');
 var searchInputEl = document.getElementById('searchTerm');
 var searchFormEl = document.getElementById('searchForm');
+var addButtonEl = document.getElementById('addButton')
+var closeButtonEl = document.getElementById('closeButton')
+
+
 var tickerName = document.getElementById('modal-ticker-name')
 var tickerCost = document.getElementById('cost')
 var tickerHigh = document.getElementById('high')
@@ -103,15 +107,15 @@ var renderSavedStocks = async function () {
 
         // Add row contents
         stockRowEl.innerHTML = "<td>" + symbol + "</td>"
-                                + "<td>" + savedStocks[i].corporation + "</td>"
-                                + "<td>" + 
-                                   "<input class='price-paid input-group-field' type='number' value=" + pricePaid.toFixed(2) +">" + 
-                                  "</td>"
-                                + "<td>" + stockQuoteInfo.c.toFixed(2)  + "</td>"
-                                + "<td class='bg-" + bgColor + "'><span class='days-gain'>" + daysGain + "%</span></td>"
-                                + "<td><span class='total-gain text-bold text-" + textColor + "'>" + totalGain + "</span></td>"
-                                + "<td><button class='remove-button remove-single' id='" + savedStocks[i].timestampAdded + "'>Remove</button></td>";
-        
+            + "<td>" + savedStocks[i].corporation + "</td>"
+            + "<td>" +
+            "<input class='price-paid input-group-field' type='number' value=" + pricePaid.toFixed(2) + ">" +
+            "</td>"
+            + "<td>" + stockQuoteInfo.c.toFixed(2) + "</td>"
+            + "<td class='bg-" + bgColor + "'><span class='days-gain'>" + daysGain + "%</span></td>"
+            + "<td><span class='total-gain text-bold text-" + textColor + "'>" + totalGain + "</span></td>"
+            + "<td><button class='remove-button remove-single' id='" + savedStocks[i].timestampAdded + "'>Remove</button></td>";
+
         // Append row to body
         tableBodyEl.appendChild(stockRowEl);
     }
@@ -119,16 +123,10 @@ var renderSavedStocks = async function () {
 
 // Add new stock to localStorage
 var addStock = function (stock) {
-    // Create newStock object to include in savedStocks array
-    var newStock = {
-        symbol: stock, // This will need to pull dynamically 
-        corporation: "Microsoft", // This will need to pull dynamically 
-        pricePaid: 74, // This will need to pull dynamically 
-        timestampAdded: Date.now()
-    }
+    // 
 
     // Add stock to array
-    savedStocks.unshift(newStock);
+    savedStocks.unshift(stock);
 
     // Update localStorage to new array of stocks
     localStorage.setItem("stockPortfolio", JSON.stringify(savedStocks));
@@ -138,7 +136,7 @@ var addStock = function (stock) {
 }
 
 // Remove all stocks from saved list
-var removeAllStocks = function() {
+var removeAllStocks = function () {
     // set savedStocks to empty array
     savedStocks = [];
 
@@ -150,7 +148,7 @@ var removeAllStocks = function() {
 }
 
 // Remove single stock from saved list
-var removeSingleStock = function(stockID) {
+var removeSingleStock = function (stockID) {
     // Remove stock row from table
     document.getElementById("stock-" + stockID).remove();
     var removeStock = -1;
@@ -160,12 +158,12 @@ var removeSingleStock = function(stockID) {
         if (savedStocks[i].timestampAdded == stockID) {
             // Add stock to new array
             removeStock = i;
-        } 
+        }
     }
     console.log(removeStock);
 
     // Remove stock from array
-    if(removeStock >= 0) {
+    if (removeStock >= 0) {
         savedStocks.splice(removeStock, 1);
     }
 
@@ -181,8 +179,11 @@ var viewStockDetails = async function (symbol) {
     // retrieve company name
     var compInfo = await getStockInfo("company-info", symbol);
 
+    // format company name
+    var companyNameTicker = compInfo['name'] + " (" + compInfo['ticker'] + ")";
+
     // display company name in modal
-    tickerName.innerText = compInfo['name'] + " (" + compInfo['ticker'] + ")";
+    tickerName.innerText = companyNameTicker
 
     // replace white space with '+' to use in related article api call
     var companyName = compInfo.name.split(' ').join('+');
@@ -199,19 +200,27 @@ var viewStockDetails = async function (symbol) {
     tickerOpen.innerText = stockQuote['o'];
     tickerClose.innerText = stockQuote['pc'];
 
+    // save ticker values to global var
+    window.newStock = {
+        symbol: symbol, // This will need to pull dynamically 
+        corporation: companyNameTicker, // This will need to pull dynamically 
+        pricePaid: stockQuote['c'], // This will need to pull dynamically 
+        timestampAdded: Date.now()
+    }
+
     // retrieve related news articles
     var relatedArticles = await getRelatedArticles(companyName); // compInfo.name
     console.log(relatedArticles);
 
     // display new image
-    for (i=0; i < 3; i++) {
+    for (i = 0; i < 3; i++) {
         modalImages.innerHTML = modalImages.innerHTML + '<img src= "' + relatedArticles.articles[i].image + '" width = 300>'
     };
 
 
     //display article links 
-    for (i=0; i < 3; i++) {
-        modalArticles.innerHTML = modalArticles.innerHTML + "<a href='" + relatedArticles.articles[i].url +"' target='blank'>" + relatedArticles.articles[i].description + "</a>";
+    for (i = 0; i < 3; i++) {
+        modalArticles.innerHTML = modalArticles.innerHTML + "<a href='" + relatedArticles.articles[i].url + "' target='blank'>" + relatedArticles.articles[i].description + "</a>";
         console.log(modalArticles)
     };
 }
@@ -229,7 +238,7 @@ function formSubmitHandler(event) {
 }
 
 // Remove stock handler function
-var removeStockHandler = function(event) {
+var removeStockHandler = function (event) {
     //prevent refreshing page
     event.preventDefault();
 
@@ -246,5 +255,36 @@ var removeStockHandler = function(event) {
     }
 }
 
+var removeStockHandler = function (event) {
+    //prevent refreshing page
+    event.preventDefault();
+
+    // Grab clicked target
+    var clickedItem = event.target;
+
+    // perform function based on target clicked
+    if (clickedItem.className.includes("remove-single")) {
+        // Remove Single Stock
+        removeSingleStock(clickedItem.id);
+    } else if (clickedItem.id === "clear-all") {
+        // Remove all stocks
+        removeAllStocks();
+    }
+}
+
+var addButtonHandler = function () {
+    if (typeof newStock !== 'undefined') {
+        addStock(newStock);
+        $('.ui.modal').modal('hide');
+    }
+}
+
+// hide the modal when close button is clicked
+var closeButtonHandler = function () {
+    $('.ui.modal').modal('hide');
+}
+
 tableEl.addEventListener("click", removeStockHandler);
-searchFormEl.addEventListener("submit", formSubmitHandler);
+addButtonEl.addEventListener("click", addButtonHandler)
+closeButtonEl.addEventListener("click", closeButtonHandler);
+searchFormEl.addEventListener("submit", formSubmitHandler); 
