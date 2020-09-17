@@ -45,8 +45,10 @@ var getStockInfo = function (reqType, symbol) {
 
 // Search for related news articles
 var getRelatedArticles = function (searchTerm) {
-    //var url = proxyUrl + "https://cors-anywhere.herokuapp.com/https://newsapi.org/v2/top-headlines?q=" + searchTerm + "&apiKey=92bae84730364e2c976c27872f8a9fa5";
-    var url = "https://gnews.io/api/v4/search?max=5&lang=en&q=" + searchTerm + "&token=0efe5784f39c90ff76da20274ced077a";
+    // Token
+    //var token = "0efe5784f39c90ff76da20274ced077a";
+    var token = "a5663e2b0a2d81f5f978eab1f9eb2415"
+    var url = "https://gnews.io/api/v4/search?max=5&lang=en&q=" + searchTerm + "&token=" + token;
 
     return new Promise(function (resolve, reject) {
         fetch(url)
