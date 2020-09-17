@@ -105,7 +105,7 @@ var renderSavedStocks = async function () {
         stockRowEl.innerHTML = "<td>" + symbol + "</td>"
                                 + "<td>" + savedStocks[i].corporation + "</td>"
                                 + "<td>" + 
-                                   "<input class='price-paid input-group-field' type='number' value=" + pricePaid.toFixed(2) +">" + 
+                                   "<input class='price-paid input-group-field' type='number' value='" + pricePaid.toFixed(2) +"' data-stock-id='" + savedStocks[i].timestampAdded + "'>" + 
                                   "</td>"
                                 + "<td>" + stockQuoteInfo.c.toFixed(2)  + "</td>"
                                 + "<td class='bg-" + bgColor + "'><span class='days-gain'>" + daysGain + "%</span></td>"
@@ -136,6 +136,7 @@ var addStock = function (stock) {
     // render stocks on page to include newly added stock
     renderSavedStocks();
 }
+
 
 // Remove all stocks from saved list
 var removeAllStocks = function() {
@@ -246,5 +247,36 @@ var removeStockHandler = function(event) {
     }
 }
 
+// Add change event listener to price paid input fields
+var editStockHandler = function(event) {
+    //prevent refreshing page
+    event.preventDefault();
+
+    // Grab changed target
+    var changedItem = event.target;
+
+    // Determine if changed item is price paid input field
+    if(changedItem.className.includes("price-paid")) {
+        // Grab values from target element
+        var changedStockId = changedItem.getAttribute("data-stock-id");
+        var newPriceValue = changedItem.value;
+
+        // Find stock in array and update value
+        for(var i = 0; i < savedStocks.length; i++) {
+            if(changedStockId == savedStocks[i].timestampAdded) {
+                savedStocks[i].pricePaid = newPriceValue;
+            }
+        }
+
+        // Update localStorage
+        localStorage.setItem("stockPortfolio", JSON.stringify(savedStocks));
+
+        // Render Saved Stocks
+        renderSavedStocks();
+    }
+}
+
+
+tableBodyEl.addEventListener("change", editStockHandler);
 tableEl.addEventListener("click", removeStockHandler);
 searchFormEl.addEventListener("submit", formSubmitHandler);
