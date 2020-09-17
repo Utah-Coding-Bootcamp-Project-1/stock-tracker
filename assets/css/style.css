@@ -165,7 +165,7 @@ i {
 }
 
 /* MODAL */
-
-.article {
-  text-align: center;
+.modal-news a{
+  text-emphasis: none;
+  color: #595959;
 }
