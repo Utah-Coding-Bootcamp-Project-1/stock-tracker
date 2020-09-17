@@ -1,7 +1,11 @@
 // Grab needed DOM Objects
-var tableEl = document.getElementById("saved-stock-table");
+var tableEl = document.getElementById('saved-stock-table');
 var searchInputEl = document.getElementById('searchTerm');
 var searchFormEl = document.getElementById('searchForm');
+var addButtonEl = document.getElementById('addButton')
+var closeButtonEl = document.getElementById('closeButton')
+
+
 var tickerName = document.getElementById('modal-ticker-name')
 var tickerCost = document.getElementById('cost')
 var tickerHigh = document.getElementById('high')
@@ -105,7 +109,7 @@ var renderSavedStocks = async function () {
         stockRowEl.innerHTML = "<td>" + symbol + "</td>"
                                 + "<td>" + savedStocks[i].corporation + "</td>"
                                 + "<td>" + 
-                                   "<input class='price-paid input-group-field' type='number' value=" + pricePaid.toFixed(2) +">" + 
+                                   "<input class='price-paid input-group-field' type='number' value='" + pricePaid.toFixed(2) +"' data-stock-id='" + savedStocks[i].timestampAdded + "'>" + 
                                   "</td>"
                                 + "<td>" + stockQuoteInfo.c.toFixed(2)  + "</td>"
                                 + "<td class='bg-" + bgColor + "'><span class='days-gain'>" + daysGain + "%</span></td>"
@@ -119,16 +123,10 @@ var renderSavedStocks = async function () {
 
 // Add new stock to localStorage
 var addStock = function (stock) {
-    // Create newStock object to include in savedStocks array
-    var newStock = {
-        symbol: stock, // This will need to pull dynamically 
-        corporation: "Microsoft", // This will need to pull dynamically 
-        pricePaid: 74, // This will need to pull dynamically 
-        timestampAdded: Date.now()
-    }
+    // 
 
     // Add stock to array
-    savedStocks.unshift(newStock);
+    savedStocks.unshift(stock);
 
     // Update localStorage to new array of stocks
     localStorage.setItem("stockPortfolio", JSON.stringify(savedStocks));
@@ -137,8 +135,9 @@ var addStock = function (stock) {
     renderSavedStocks();
 }
 
+
 // Remove all stocks from saved list
-var removeAllStocks = function() {
+var removeAllStocks = function () {
     // set savedStocks to empty array
     savedStocks = [];
 
@@ -150,7 +149,7 @@ var removeAllStocks = function() {
 }
 
 // Remove single stock from saved list
-var removeSingleStock = function(stockID) {
+var removeSingleStock = function (stockID) {
     // Remove stock row from table
     document.getElementById("stock-" + stockID).remove();
     var removeStock = -1;
@@ -160,12 +159,12 @@ var removeSingleStock = function(stockID) {
         if (savedStocks[i].timestampAdded == stockID) {
             // Add stock to new array
             removeStock = i;
-        } 
+        }
     }
     console.log(removeStock);
 
     // Remove stock from array
-    if(removeStock >= 0) {
+    if (removeStock >= 0) {
         savedStocks.splice(removeStock, 1);
     }
 
@@ -181,8 +180,11 @@ var viewStockDetails = async function (symbol) {
     // retrieve company name
     var compInfo = await getStockInfo("company-info", symbol);
 
+    // format company name
+    var companyNameTicker = compInfo['name'] + " (" + compInfo['ticker'] + ")";
+
     // display company name in modal
-    tickerName.innerText = compInfo['name'] + " (" + compInfo['ticker'] + ")";
+    tickerName.innerText = companyNameTicker
 
     // replace white space with '+' to use in related article api call
     var companyName = compInfo.name.split(' ').join('+');
@@ -198,20 +200,27 @@ var viewStockDetails = async function (symbol) {
     tickerOpen.innerText = stockQuote['o'];
     tickerClose.innerText = stockQuote['pc'];
 
+    // save ticker values to global var
+    window.newStock = {
+        symbol: symbol, // This will need to pull dynamically 
+        corporation: companyNameTicker, // This will need to pull dynamically 
+        pricePaid: stockQuote['c'], // This will need to pull dynamically 
+        timestampAdded: Date.now()
+    }
+
     // retrieve related news articles
     var relatedArticles = await getRelatedArticles(companyName); // compInfo.name
 
     // display new image
-    for (i=0; i < 3; i++) {
-        var modalImageChild = document.createElement("div");
-        modalImageChild = modalImageChild.innerHTML + '<img src= "' + relatedArticles.articles[i].image + '" width = 300>';
-        modalImageChild.appendChild(modalImages);
+    for (i = 0; i < 3; i++) {
+        modalImages.innerHTML = modalImages.innerHTML + '<img src= "' + relatedArticles.articles[i].image + '" width = 300>'
     };
 
 
     //display article links 
-    for (i=0; i < 3; i++) {
-        modalArticles.innerHTML = modalArticles.innerHTML + "<a href='" + relatedArticles.articles[i].url +"' target='blank'>" + relatedArticles.articles[i].description + "</a>";
+    for (i = 0; i < 3; i++) {
+        modalArticles.innerHTML = modalArticles.innerHTML + "<a href='" + relatedArticles.articles[i].url + "' target='blank'>" + relatedArticles.articles[i].description + "</a>";
+        console.log(modalArticles)
     };
 }
 
@@ -228,7 +237,7 @@ function formSubmitHandler(event) {
 }
 
 // Remove stock handler function
-var removeStockHandler = function(event) {
+var removeStockHandler = function (event) {
     //prevent refreshing page
     event.preventDefault();
 
@@ -245,5 +254,51 @@ var removeStockHandler = function(event) {
     }
 }
 
+// Add button handler function
+var addButtonHandler = function () {
+    if (typeof newStock !== 'undefined') {
+        addStock(newStock);
+        $('.ui.modal').modal('hide');
+    }
+}
+
+// hide the modal when close button is clicked
+var closeButtonHandler = function () {
+    $('.ui.modal').modal('hide');
+}
+
+// Add change event listener to price paid input fields
+var editStockHandler = function(event) {
+    //prevent refreshing page
+    event.preventDefault();
+
+    // Grab changed target
+    var changedItem = event.target;
+
+    // Determine if changed item is price paid input field
+    if(changedItem.className.includes("price-paid")) {
+        // Grab values from target element
+        var changedStockId = changedItem.getAttribute("data-stock-id");
+        var newPriceValue = changedItem.value;
+
+        // Find stock in array and update value
+        for(var i = 0; i < savedStocks.length; i++) {
+            if(changedStockId == savedStocks[i].timestampAdded) {
+                savedStocks[i].pricePaid = newPriceValue;
+            }
+        }
+
+        // Update localStorage
+        localStorage.setItem("stockPortfolio", JSON.stringify(savedStocks));
+
+        // Render Saved Stocks
+        renderSavedStocks();
+    }
+}
+
+
+tableBodyEl.addEventListener("change", editStockHandler);
 tableEl.addEventListener("click", removeStockHandler);
-searchFormEl.addEventListener("submit", formSubmitHandler);
+addButtonEl.addEventListener("click", addButtonHandler)
+closeButtonEl.addEventListener("click", closeButtonHandler);
+searchFormEl.addEventListener("submit", formSubmitHandler); 
