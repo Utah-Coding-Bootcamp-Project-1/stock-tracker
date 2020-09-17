@@ -202,9 +202,18 @@ var viewStockDetails = async function (symbol) {
     // display company name in modal
     tickerName.innerText = companyNameTicker
 
-    // replace white space with '+' to use in related article api call
-    var companyName = compInfo.name.split(' ').join('+');
-    companyName = companyName.replace(".", "+");
+
+    var companyName = compInfo.name;
+
+    // check if companyName contains spaces, replace with '+'
+    if(companyName.includes(' ')) {
+        companyName.split(' ').join('+');
+    } 
+
+    // check if company name contains '.' and replace with '+'
+    if(companyName.includes('.')) {
+        companyName = companyName.replace(".", "+");
+    }
 
     // retrieve stock quote
     var stockQuote = await getStockInfo("stock-quote", symbol);
