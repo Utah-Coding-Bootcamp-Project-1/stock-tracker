@@ -66,11 +66,25 @@ var getRelatedArticles = function (searchTerm) {
     });
 }
 
+// Check if any stocks in array and hide/show elements
+var toggleHiddenElements = function () {
+    // hide/show add stock message and clear all button
+    if (savedStocks.length > 0) {
+        // hide add stock message 
+        document.getElementById("add-stock-message").className = "hidden";
+        document.getElementById("clear-all").className = "remove-button";
+    } else {
+        document.getElementById("add-stock-message").className = "";
+        document.getElementById("clear-all").className = "remove-button hidden";
+    }
+}
+
 // render saved stocks in document
 var renderSavedStocks = async function () {
     // Destroy elements in parent object
     tableBodyEl.innerHTML = "";
-
+    
+    
     // Loop through savedStocks and add as rows to table body
     for (var i = 0; i < savedStocks.length; i++) {
         // Perform fetch api call to get company info by symbol
@@ -107,8 +121,8 @@ var renderSavedStocks = async function () {
         stockRowEl.innerHTML = "<td>" + symbol + "</td>"
                                 + "<td>" + savedStocks[i].corporation + "</td>"
                                 + "<td>" + 
-                                   "<input class='price-paid input-group-field' type='number' value='" + pricePaid.toFixed(2) +"' data-stock-id='" + savedStocks[i].timestampAdded + "'>" + 
-                                  "</td>"
+                                "<input class='price-paid input-group-field' type='number' value='" + pricePaid.toFixed(2) +"' data-stock-id='" + savedStocks[i].timestampAdded + "'>" + 
+                                "</td>"
                                 + "<td>" + stockQuoteInfo.c.toFixed(2)  + "</td>"
                                 + "<td class='bg-" + bgColor + "'><span class='days-gain'>" + daysGain + "%</span></td>"
                                 + "<td><span class='total-gain text-bold text-" + textColor + "'>" + totalGain + "</span></td>"
@@ -117,12 +131,13 @@ var renderSavedStocks = async function () {
         // Append row to body
         tableBodyEl.appendChild(stockRowEl);
     }
+
+    // hide/show elements based on savedStock array
+    toggleHiddenElements();
 }
 
 // Add new stock to localStorage
 var addStock = function (stock) {
-    // 
-
     // Add stock to array
     savedStocks.unshift(stock);
 
@@ -165,6 +180,9 @@ var removeSingleStock = function (stockID) {
     if (removeStock >= 0) {
         savedStocks.splice(removeStock, 1);
     }
+
+    // hide/show elements based on savedStock array
+    toggleHiddenElements();
 
     // Update localStorage to new array of stocks
     localStorage.setItem("stockPortfolio", JSON.stringify(savedStocks));
@@ -305,9 +323,13 @@ var editStockHandler = function(event) {
     }
 }
 
-
+// Event listeners
 tableBodyEl.addEventListener("change", editStockHandler);
 tableEl.addEventListener("click", removeStockHandler);
 addButtonEl.addEventListener("click", addButtonHandler)
 closeButtonEl.addEventListener("click", closeButtonHandler);
 searchFormEl.addEventListener("submit", formSubmitHandler); 
+
+
+// Render stocks on page load
+renderSavedStocks();

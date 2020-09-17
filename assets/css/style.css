@@ -176,3 +176,7 @@ i {
   text-emphasis: none;
   color: #595959;
 }
+
+.hidden {
+  visibility: hidden;
+}
