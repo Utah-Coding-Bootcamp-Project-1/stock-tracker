@@ -8,6 +8,9 @@ var tickerHigh = document.getElementById('high');
 var tickerLow = document.getElementById('low');
 var tickerOpen = document.getElementById('open');
 var tickerClose = document.getElementById('close');
+var tableBodyEl = document.getElementById('saved-stock-list');
+var addButtonEl = document.getElementById('addButton');
+var closeButtonEl = document.getElementById('closeButton');
 
 // Load saved stocks from localStorage and parse to object
 var savedStocks = JSON.parse(localStorage.getItem("stockPortfolio")) || [];
