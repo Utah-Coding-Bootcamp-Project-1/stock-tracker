@@ -107,15 +107,15 @@ var renderSavedStocks = async function () {
 
         // Add row contents
         stockRowEl.innerHTML = "<td>" + symbol + "</td>"
-            + "<td>" + savedStocks[i].corporation + "</td>"
-            + "<td>" +
-            "<input class='price-paid input-group-field' type='number' value=" + pricePaid.toFixed(2) + ">" +
-            "</td>"
-            + "<td>" + stockQuoteInfo.c.toFixed(2) + "</td>"
-            + "<td class='bg-" + bgColor + "'><span class='days-gain'>" + daysGain + "%</span></td>"
-            + "<td><span class='total-gain text-bold text-" + textColor + "'>" + totalGain + "</span></td>"
-            + "<td><button class='remove-button remove-single' id='" + savedStocks[i].timestampAdded + "'>Remove</button></td>";
-
+                                + "<td>" + savedStocks[i].corporation + "</td>"
+                                + "<td>" + 
+                                   "<input class='price-paid input-group-field' type='number' value='" + pricePaid.toFixed(2) +"' data-stock-id='" + savedStocks[i].timestampAdded + "'>" + 
+                                  "</td>"
+                                + "<td>" + stockQuoteInfo.c.toFixed(2)  + "</td>"
+                                + "<td class='bg-" + bgColor + "'><span class='days-gain'>" + daysGain + "%</span></td>"
+                                + "<td><span class='total-gain text-bold text-" + textColor + "'>" + totalGain + "</span></td>"
+                                + "<td><button class='remove-button remove-single' id='" + savedStocks[i].timestampAdded + "'>Remove</button></td>";
+        
         // Append row to body
         tableBodyEl.appendChild(stockRowEl);
     }
@@ -134,6 +134,7 @@ var addStock = function (stock) {
     // render stocks on page to include newly added stock
     renderSavedStocks();
 }
+
 
 // Remove all stocks from saved list
 var removeAllStocks = function () {
@@ -255,23 +256,7 @@ var removeStockHandler = function (event) {
     }
 }
 
-var removeStockHandler = function (event) {
-    //prevent refreshing page
-    event.preventDefault();
-
-    // Grab clicked target
-    var clickedItem = event.target;
-
-    // perform function based on target clicked
-    if (clickedItem.className.includes("remove-single")) {
-        // Remove Single Stock
-        removeSingleStock(clickedItem.id);
-    } else if (clickedItem.id === "clear-all") {
-        // Remove all stocks
-        removeAllStocks();
-    }
-}
-
+// Add button handler function
 var addButtonHandler = function () {
     if (typeof newStock !== 'undefined') {
         addStock(newStock);
@@ -284,6 +269,37 @@ var closeButtonHandler = function () {
     $('.ui.modal').modal('hide');
 }
 
+// Add change event listener to price paid input fields
+var editStockHandler = function(event) {
+    //prevent refreshing page
+    event.preventDefault();
+
+    // Grab changed target
+    var changedItem = event.target;
+
+    // Determine if changed item is price paid input field
+    if(changedItem.className.includes("price-paid")) {
+        // Grab values from target element
+        var changedStockId = changedItem.getAttribute("data-stock-id");
+        var newPriceValue = changedItem.value;
+
+        // Find stock in array and update value
+        for(var i = 0; i < savedStocks.length; i++) {
+            if(changedStockId == savedStocks[i].timestampAdded) {
+                savedStocks[i].pricePaid = newPriceValue;
+            }
+        }
+
+        // Update localStorage
+        localStorage.setItem("stockPortfolio", JSON.stringify(savedStocks));
+
+        // Render Saved Stocks
+        renderSavedStocks();
+    }
+}
+
+
+tableBodyEl.addEventListener("change", editStockHandler);
 tableEl.addEventListener("click", removeStockHandler);
 addButtonEl.addEventListener("click", addButtonHandler)
 closeButtonEl.addEventListener("click", closeButtonHandler);
