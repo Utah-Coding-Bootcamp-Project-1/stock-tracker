@@ -228,7 +228,6 @@ var viewStockDetails = async function (symbol) {
 
         modalNews.appendChild(modalNewsRow);
     };
-    console.log(modalNews);
 };
 
 // get value in search field when the search button/return is used
