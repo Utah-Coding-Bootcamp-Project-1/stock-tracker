@@ -237,7 +237,7 @@ var viewStockDetails = async function (symbol) {
 
         var modalNewsImg = document.createElement("section");
         modalNewsImg.className = "six wide column";
-        modalNewsImg.innerHTML ='<img src= "' + relatedArticles.articles[i].image + '" width = 300>';
+        modalNewsImg.innerHTML = '<a href="' + relatedArticles.articles[i].url + 'target="blank">' + '<img class= "ui rounded image" src= "' + relatedArticles.articles[i].image + '" width = 300>' + '</a>';
     
         var modalNewsArticle = document.createElement("section");
         modalNewsArticle.className = "ten wide column";
