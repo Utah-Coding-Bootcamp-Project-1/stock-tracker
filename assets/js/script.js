@@ -45,9 +45,10 @@ var getStockInfo = function (reqType, symbol) {
 
 // Search for related news articles
 var getRelatedArticles = function (searchTerm) {
-    // Token
+    // Tokens
     //var token = "0efe5784f39c90ff76da20274ced077a";
-    var token = "a5663e2b0a2d81f5f978eab1f9eb2415"
+    // var token = "a5663e2b0a2d81f5f978eab1f9eb2415"
+    var token = "a09f193a45eebc6dbb36b80db7999354"
     var url = "https://gnews.io/api/v4/search?max=5&lang=en&q=" + searchTerm + "&token=" + token;
 
     return new Promise(function (resolve, reject) {
