@@ -14,9 +14,35 @@ var addButtonEl = document.getElementById('addButton');
 var closeButtonEl = document.getElementById('closeButton');
 var refreshButtonEl = document.getElementById('refresh-button');
 var modalGraphEl = document.getElementById('modal-graph');
+var mainErrorMessageEl = document.getElementById("main-error-message");
+var modalErrorMessageEl = document.getElementById("modal-error-message");
 
 // Load saved stocks from localStorage and parse to object
 var savedStocks = JSON.parse(localStorage.getItem("stockPortfolio")) || [];
+
+
+// Display error message
+var displayErrorMessage = function (obj, message) {
+    // Clear previous error messages
+    clearErrorMessages();
+
+    // Show error message
+    obj.innerHTML = "<div class='header'>"
+                    + message 
+                    + "</div>";
+
+    $(obj).transition('fade up');
+}
+
+
+// clear error messages 
+var clearErrorMessages = function () {
+    // clear all error messages
+    mainErrorMessageEl.innerHTML = "";
+    mainErrorMessageEl.className = "ui negative message hidden";
+    modalErrorMessageEl.innerHTML = "";
+    modalErrorMessageEl.className = "ui negative message hidden";
+}
 
 // Find Stock By symbol
 var getStockInfo = function (reqType, symbol) {
@@ -27,6 +53,7 @@ var getStockInfo = function (reqType, symbol) {
         // stock-quote
         var url = "https://finnhub.io/api/v1/quote"; // Stock quote details
     }
+
     // Perform fetch api call to get company info by symbol
     return new Promise(function (resolve, reject) {
         fetch(url + "?symbol=" + symbol + "&token=btc3din48v6p15lfr1ag")
@@ -58,7 +85,6 @@ var getRelatedArticles = function (searchTerm) {
         fetch(url)
             .then(function (result) {
                 if (result.ok) {
-
                     resolve(result.json());
                 } else {
                     reject("error");
@@ -213,17 +239,26 @@ var removeSingleStock = function (stockID) {
 
 // Open stock details modal
 var viewStockDetails = async function (symbol, addBtn) {
+    // Clear any error messages
+    clearErrorMessages();
+
+    // retrieve company name
+    var compInfo = await getStockInfo("company-info", symbol);
+
+    // Check if company info was returned
+    if(!compInfo.name) {
+        // display error message and prevent modal popup
+        displayErrorMessage(mainErrorMessageEl, "Unable to find company info using the provided stock symbol.");
+        return;
+    }
+
     // Show modal
     $('.ui.modal').modal('show');
-
     if (!addBtn) {
         addButtonEl.className = "ui green button hidden";
     } else {
         addButtonEl.className = "ui green button";
     }
-
-    // retrieve company name
-    var compInfo = await getStockInfo("company-info", symbol);
 
     // format company name
     var companyNameTicker = compInfo['name'] + " (" + compInfo['ticker'] + ")";
@@ -231,7 +266,7 @@ var viewStockDetails = async function (symbol, addBtn) {
     // display company name in modal
     tickerName.innerText = companyNameTicker
 
-
+    // Companyh name
     var companyName = compInfo.name;
 
     // check if companyName contains spaces, replace with '+'
@@ -275,39 +310,28 @@ var viewStockDetails = async function (symbol, addBtn) {
 
     // retrieve related news articles
     var relatedArticles = await getRelatedArticles(companyName); // compInfo.name
-    console.log(relatedArticles.totalArticles);
 
     // display articles and images
     var modalNews = document.getElementById('modal-news');
     modalNews.innerHTML = "";
 
-    if (relatedArticles.totalArticles === 0 ) {
-        var noArtilces = document.createElement("section");
-        noArtilces.innerHTML = "No articles available for " + compInfo['name'];
-        noArtilces.className = "modal-error column"
+    for (i=0; i < 3; i++) {
+        var modalNewsRow = document.createElement("section")
+        modalNewsRow.className = "row middle aligned";
 
-        modalNews.appendChild(noArtilces);
-    } else {
-        for (i=0; i < 3; i++) {
-            var modalNewsRow = document.createElement("section");
-            modalNewsRow.className = "row middle aligned";
+        var modalNewsImg = document.createElement("section");
+        modalNewsImg.className = "six wide column";
+        modalNewsImg.innerHTML = '<a href="' + relatedArticles.articles[i].url + '" target="_blank">' + '<img class= "ui rounded image" src= "' + relatedArticles.articles[i].image + '" width = 300>' + '</a>';
     
-            var modalNewsImg = document.createElement("section");
-            modalNewsImg.className = "six wide column";
-            modalNewsImg.innerHTML = '<a href="' + relatedArticles.articles[i].url + '" target="_blank">' + '<img class= "ui rounded image" src= "' + relatedArticles.articles[i].image + '" width = 300>' + '</a>';
+        var modalNewsArticle = document.createElement("section");
+        modalNewsArticle.className = "ten wide column";
+        modalNewsArticle.innerHTML ='<a href="' + relatedArticles.articles[i].url + '" target="_blank">' + relatedArticles.articles[i].description + '</a>';
         
-            var modalNewsArticle = document.createElement("section");
-            modalNewsArticle.className = "ten wide column";
-            modalNewsArticle.innerHTML ='<a href="' + relatedArticles.articles[i].url + '" target="_blank">' + relatedArticles.articles[i].description + '</a>';
-            
-            modalNewsRow.appendChild(modalNewsImg);
-            modalNewsRow.appendChild(modalNewsArticle);
-    
-            modalNews.appendChild(modalNewsRow);
-        };
-    };;
+        modalNewsRow.appendChild(modalNewsImg);
+        modalNewsRow.appendChild(modalNewsArticle);
 
-    
+        modalNews.appendChild(modalNewsRow);
+    };
 };
 
 // get value in search field when the search button/return is used
@@ -354,6 +378,7 @@ var addButtonHandler = function () {
 // hide the modal when close button is clicked
 var closeButtonHandler = function () {
     $('.ui.modal').modal('hide');
+    clearErrorMessages();
 }
 
 // Add change event listener to price paid input fields
@@ -376,7 +401,6 @@ var editStockHandler = function(event) {
 
         // Update localStorage
         localStorage.setItem("stockPortfolio", JSON.stringify(savedStocks));
-
 
         // Render Saved Stocks
         renderSavedStocks();
