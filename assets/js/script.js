@@ -14,9 +14,38 @@ var addButtonEl = document.getElementById('addButton');
 var closeButtonEl = document.getElementById('closeButton');
 var refreshButtonEl = document.getElementById('refresh-button');
 var modalGraphEl = document.getElementById('modal-graph');
+var modalNews = document.getElementById('modal-news');
+var mainErrorMessageEl = document.getElementById("main-error-message");
+var modalErrorMessageEl = document.getElementById("modal-error-message");
 
 // Load saved stocks from localStorage and parse to object
 var savedStocks = JSON.parse(localStorage.getItem("stockPortfolio")) || [];
+
+
+// Display error message
+var displayErrorMessage = function (obj, message) {
+    // Clear previous error messages
+    clearErrorMessages();
+
+    // Show error message
+    obj.innerHTML = "<div class='header'>"
+                    + message 
+                    + "</div>";
+
+    $(obj).transition('fade up');
+}
+
+
+// clear error messages 
+var clearErrorMessages = function () {
+    // clear all error messages
+    mainErrorMessageEl.innerHTML = "";
+    mainErrorMessageEl.className = "ui negative message hidden";
+    mainErrorMessageEl.style = "display:none";
+    modalErrorMessageEl.innerHTML = "";
+    modalErrorMessageEl.className = "ui negative message hidden";
+    mainErrorMessageEl.style = "display:none";
+}
 
 // Find Stock By symbol
 var getStockInfo = function (reqType, symbol) {
@@ -27,6 +56,7 @@ var getStockInfo = function (reqType, symbol) {
         // stock-quote
         var url = "https://finnhub.io/api/v1/quote"; // Stock quote details
     }
+
     // Perform fetch api call to get company info by symbol
     return new Promise(function (resolve, reject) {
         fetch(url + "?symbol=" + symbol + "&token=btc3din48v6p15lfr1ag")
@@ -34,13 +64,10 @@ var getStockInfo = function (reqType, symbol) {
                 if (result.ok) {
                     resolve(result.json());
                 } else {
-                    // How do we warn the user?
-                    // Display message on view somewhere?
                     reject("error");
                 }
             })
             .catch(function (error) {
-                // NEED A WAY TO LET THE USER KNOW WITHOUT ALERTS, PROMPTS, or LOGS
                 reject("error");
             });
     })
@@ -51,14 +78,14 @@ var getRelatedArticles = function (searchTerm) {
     // Tokens
     //var token = "0efe5784f39c90ff76da20274ced077a";
     // var token = "a5663e2b0a2d81f5f978eab1f9eb2415"
-    var token = "a09f193a45eebc6dbb36b80db7999354"
+    //var token = "a09f193a45eebc6dbb36b80db7999354"
+    var token = "0efe5784f39c90ff76da20274ced077a";
     var url = "https://gnews.io/api/v4/search?max=5&lang=en&q=" + searchTerm + "&token=" + token;
 
     return new Promise(function (resolve, reject) {
         fetch(url)
             .then(function (result) {
                 if (result.ok) {
-
                     resolve(result.json());
                 } else {
                     reject("error");
@@ -219,17 +246,22 @@ var removeSingleStock = function (stockID) {
 
 // Open stock details modal
 var viewStockDetails = async function (symbol, addBtn) {
-    // Show modal
-    $('.ui.modal').modal('show');
+    // Clear any error messages
+    clearErrorMessages();
 
-    if (!addBtn) {
-        addButtonEl.className = "ui green button hidden";
-    } else {
-        addButtonEl.className = "ui green button";
-    }
+    // Remove previous content
+    modalNews.innerHTML = "";
+    modalGraphEl.innerHTML = "";
 
     // retrieve company name
     var compInfo = await getStockInfo("company-info", symbol);
+
+    // Check if company info was returned
+    if(!compInfo.name) {
+        // display error message and prevent modal popup
+        displayErrorMessage(mainErrorMessageEl, "Unable to find company info using the provided stock symbol.");
+        return;
+    }
 
     // format company name
     var companyNameTicker = compInfo['name'] + " (" + compInfo['ticker'] + ")";
@@ -237,7 +269,7 @@ var viewStockDetails = async function (symbol, addBtn) {
     // display company name in modal
     tickerName.innerText = companyNameTicker
 
-
+    // Companyh name
     var companyName = compInfo.name;
 
     // check if companyName contains spaces, replace with '+'
@@ -253,6 +285,21 @@ var viewStockDetails = async function (symbol, addBtn) {
     // retrieve stock quote
     var stockQuote = await getStockInfo("stock-quote", symbol);
 
+    // Check if valid stock quote was returned
+    if(!stockQuote.c) {
+        // display error message and prevent modal popup
+        displayErrorMessage(mainErrorMessageEl, "Unable to find company info using the provided stock symbol.");
+        return;
+    }
+
+    // Show modal
+    $('.ui.modal').modal('show');
+    if (!addBtn) {
+        addButtonEl.className = "ui green button hidden";
+    } else {
+        addButtonEl.className = "ui green button";
+    }
+
     // put ticker values into table
     tickerCost.innerText = stockQuote['c'];
     tickerHigh.innerText = stockQuote['h'];
@@ -262,9 +309,9 @@ var viewStockDetails = async function (symbol, addBtn) {
 
     // save ticker values to global var
     window.newStock = {
-        symbol: symbol, // This will need to pull dynamically 
-        corporation: companyNameTicker, // This will need to pull dynamically 
-        pricePaid: stockQuote['c'], // This will need to pull dynamically 
+        symbol: symbol, 
+        corporation: companyNameTicker, 
+        pricePaid: stockQuote['c'], 
         timestampAdded: Date.now()
     }
 
@@ -272,7 +319,7 @@ var viewStockDetails = async function (symbol, addBtn) {
     // <iframe frameBorder='0' scrolling='no' width='800' height='420' src='https://api.stockdio.com/visualization/financial/charts/v1/HistoricalPrices?app-key=9FF1A978F5E24F84B3825CC1B09B2928&symbol=TSLA&dividends=true&splits=true&showLastPrice=false&palette=Financial-Light'></iframe>
 
     var stockGraph = document.createElement("div");
-    modalGraphEl.innerHTML = "";
+    
     stockGraph.innerHTML = "<iframe frameBorder='0' scrolling='no' width='100%' height='420' src='https://api.stockdio.com/visualization/financial/charts/v1/HistoricalPrices?app-key=9FF1A978F5E24F84B3825CC1B09B2928&symbol=" +
                             compInfo['ticker'] +
                             "&dividends=true&splits=true&showLastPrice=false&palette=Financial-Light'></iframe>";
@@ -281,23 +328,14 @@ var viewStockDetails = async function (symbol, addBtn) {
 
     // retrieve related news articles
     var relatedArticles = await getRelatedArticles(companyName); // compInfo.name
-    console.log(relatedArticles.totalArticles);
-
-    // display articles and images
-    var modalNews = document.getElementById('modal-news');
-    modalNews.innerHTML = "";
-
-    if (relatedArticles.totalArticles === 0 ) {
-        var noArtilces = document.createElement("section");
-        noArtilces.innerHTML = "No articles available for " + compInfo['name'];
-        noArtilces.className = "modal-error column"
-
-        modalNews.appendChild(noArtilces);
-    } else {
-        for (i=0; i < 3; i++) {
-            var modalNewsRow = document.createElement("section");
-            modalNewsRow.className = "row middle aligned";
     
+    if(relatedArticles.totalArticles > 0) {
+         // display related articles and images
+        for (i=0; i < 3; i++) {
+            
+            var modalNewsRow = document.createElement("section")
+            modalNewsRow.className = "row middle aligned";
+
             var modalNewsImg = document.createElement("section");
             modalNewsImg.className = "six wide column";
             modalNewsImg.innerHTML = '<a href="' + relatedArticles.articles[i].url + '" target="_blank">' + '<img class= "ui rounded image" src= "' + relatedArticles.articles[i].image + '" width = 300>' + '</a>';
@@ -308,12 +346,12 @@ var viewStockDetails = async function (symbol, addBtn) {
             
             modalNewsRow.appendChild(modalNewsImg);
             modalNewsRow.appendChild(modalNewsArticle);
-    
+
             modalNews.appendChild(modalNewsRow);
         };
-    };;
-
-    
+    } else {
+        displayErrorMessage(modalErrorMessageEl, "No related articles found.");
+    }
 };
 
 // get value in search field when the search button/return is used
@@ -322,7 +360,7 @@ function formSubmitHandler(event) {
     event.preventDefault();
 
     //get value from search field and trim it
-    var searchTerm = searchInputEl.value.trim();
+    var searchTerm = searchInputEl.value.trim().toUpperCase();
 
     //call function to get info from api and display it in modal
     viewStockDetails(searchTerm, true);
@@ -360,6 +398,7 @@ var addButtonHandler = function () {
 // hide the modal when close button is clicked
 var closeButtonHandler = function () {
     $('.ui.modal').modal('hide');
+    clearErrorMessages();
 }
 
 // Add change event listener to price paid input fields
@@ -382,7 +421,6 @@ var editStockHandler = function(event) {
 
         // Update localStorage
         localStorage.setItem("stockPortfolio", JSON.stringify(savedStocks));
-
 
         // Render Saved Stocks
         renderSavedStocks();
