@@ -286,11 +286,11 @@ var viewStockDetails = async function (symbol, addBtn) {
 
         var modalNewsImg = document.createElement("section");
         modalNewsImg.className = "six wide column";
-        modalNewsImg.innerHTML = '<a href="' + relatedArticles.articles[i].url + 'target="blank">' + '<img class= "ui rounded image" src= "' + relatedArticles.articles[i].image + '" width = 300>' + '</a>';
+        modalNewsImg.innerHTML = '<a href="' + relatedArticles.articles[i].url + '" target="_blank">' + '<img class= "ui rounded image" src= "' + relatedArticles.articles[i].image + '" width = 300>' + '</a>';
     
         var modalNewsArticle = document.createElement("section");
         modalNewsArticle.className = "ten wide column";
-        modalNewsArticle.innerHTML ='<a href="' + relatedArticles.articles[i].url + 'target="blank">' + relatedArticles.articles[i].description + '</a>';
+        modalNewsArticle.innerHTML ='<a href="' + relatedArticles.articles[i].url + '" target="_blank">' + relatedArticles.articles[i].description + '</a>';
         
         modalNewsRow.appendChild(modalNewsImg);
         modalNewsRow.appendChild(modalNewsArticle);
