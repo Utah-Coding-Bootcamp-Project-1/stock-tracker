@@ -275,28 +275,39 @@ var viewStockDetails = async function (symbol, addBtn) {
 
     // retrieve related news articles
     var relatedArticles = await getRelatedArticles(companyName); // compInfo.name
+    console.log(relatedArticles.totalArticles);
 
     // display articles and images
     var modalNews = document.getElementById('modal-news');
     modalNews.innerHTML = "";
 
-    for (i=0; i < 3; i++) {
-        var modalNewsRow = document.createElement("section")
-        modalNewsRow.className = "row middle aligned";
+    if (relatedArticles.totalArticles === 0 ) {
+        var noArtilces = document.createElement("section");
+        noArtilces.innerHTML = "No articles available for " + compInfo['name'];
+        noArtilces.className = "modal-error column"
 
-        var modalNewsImg = document.createElement("section");
-        modalNewsImg.className = "six wide column";
-        modalNewsImg.innerHTML = '<a href="' + relatedArticles.articles[i].url + '" target="_blank">' + '<img class= "ui rounded image" src= "' + relatedArticles.articles[i].image + '" width = 300>' + '</a>';
+        modalNews.appendChild(noArtilces);
+    } else {
+        for (i=0; i < 3; i++) {
+            var modalNewsRow = document.createElement("section");
+            modalNewsRow.className = "row middle aligned";
     
-        var modalNewsArticle = document.createElement("section");
-        modalNewsArticle.className = "ten wide column";
-        modalNewsArticle.innerHTML ='<a href="' + relatedArticles.articles[i].url + '" target="_blank">' + relatedArticles.articles[i].description + '</a>';
+            var modalNewsImg = document.createElement("section");
+            modalNewsImg.className = "six wide column";
+            modalNewsImg.innerHTML = '<a href="' + relatedArticles.articles[i].url + '" target="_blank">' + '<img class= "ui rounded image" src= "' + relatedArticles.articles[i].image + '" width = 300>' + '</a>';
         
-        modalNewsRow.appendChild(modalNewsImg);
-        modalNewsRow.appendChild(modalNewsArticle);
+            var modalNewsArticle = document.createElement("section");
+            modalNewsArticle.className = "ten wide column";
+            modalNewsArticle.innerHTML ='<a href="' + relatedArticles.articles[i].url + '" target="_blank">' + relatedArticles.articles[i].description + '</a>';
+            
+            modalNewsRow.appendChild(modalNewsImg);
+            modalNewsRow.appendChild(modalNewsArticle);
+    
+            modalNews.appendChild(modalNewsRow);
+        };
+    };;
 
-        modalNews.appendChild(modalNewsRow);
-    };
+    
 };
 
 // get value in search field when the search button/return is used

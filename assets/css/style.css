@@ -210,6 +210,12 @@ i {
   color: #595959;
 }
 
+.modal-error{
+  text-align: center;
+  text-emphasis: bold;
+  font-size: 16px;
+}
+
 .hidden {
   visibility: hidden;
 }
