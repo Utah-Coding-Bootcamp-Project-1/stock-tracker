@@ -13,6 +13,7 @@ var tickerClose = document.getElementById('close');
 var addButtonEl = document.getElementById('addButton');
 var closeButtonEl = document.getElementById('closeButton');
 var refreshButtonEl = document.getElementById('refresh-button');
+var modalGraphEl = document.getElementById('modal-graph');
 
 // Load saved stocks from localStorage and parse to object
 var savedStocks = JSON.parse(localStorage.getItem("stockPortfolio")) || [];
@@ -260,6 +261,17 @@ var viewStockDetails = async function (symbol, addBtn) {
         pricePaid: stockQuote['c'], // This will need to pull dynamically 
         timestampAdded: Date.now()
     }
+
+    // insert stock graph iframe
+    // <iframe frameBorder='0' scrolling='no' width='800' height='420' src='https://api.stockdio.com/visualization/financial/charts/v1/HistoricalPrices?app-key=9FF1A978F5E24F84B3825CC1B09B2928&symbol=TSLA&dividends=true&splits=true&showLastPrice=false&palette=Financial-Light'></iframe>
+
+    var stockGraph = document.createElement("div");
+    stockGraph.innerHTML = ""
+    stockGraph.innerHTML = "<iframe frameBorder='0' scrolling='no' width='100%' height='420' src='https://api.stockdio.com/visualization/financial/charts/v1/HistoricalPrices?app-key=9FF1A978F5E24F84B3825CC1B09B2928&symbol=" +
+                            compInfo['ticker'] +
+                            "&dividends=true&splits=true&showLastPrice=false&palette=Financial-Light'></iframe>";
+
+    modalGraphEl.appendChild(stockGraph);
 
     // retrieve related news articles
     var relatedArticles = await getRelatedArticles(companyName); // compInfo.name
