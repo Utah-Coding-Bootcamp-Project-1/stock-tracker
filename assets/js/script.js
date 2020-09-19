@@ -1,5 +1,7 @@
 // Grab needed DOM Objects
 var tableEl = document.getElementById('saved-stock-table');
+var tableBodyEl = document.getElementById('saved-stock-list');
+var tableFooterEl = document.getElementById('saved-stock-summary');
 var searchInputEl = document.getElementById('searchTerm');
 var searchFormEl = document.getElementById('searchForm');
 var tickerName = document.getElementById('modal-ticker-name');
@@ -8,9 +10,9 @@ var tickerHigh = document.getElementById('high');
 var tickerLow = document.getElementById('low');
 var tickerOpen = document.getElementById('open');
 var tickerClose = document.getElementById('close');
-var tableBodyEl = document.getElementById('saved-stock-list');
 var addButtonEl = document.getElementById('addButton');
 var closeButtonEl = document.getElementById('closeButton');
+var refreshButtonEl = document.getElementById('refresh-button');
 
 // Load saved stocks from localStorage and parse to object
 var savedStocks = JSON.parse(localStorage.getItem("stockPortfolio")) || [];
@@ -83,14 +85,19 @@ var toggleHiddenElements = function () {
 // render saved stocks in document
 var renderSavedStocks = async function () {
     // Destroy elements in parent object
-    tableBodyEl.innerHTML = "";
+    tableBodyEl.innerHTML ="";
+    tableFooterEl.innerHTML = "";
     
-    
+    // create varaible to summarize table rows in footer
+    var sPricePaid = 0;
+    var sCurrentPrice = 0;
+    var sPreviousClose = 0;
+
     // Loop through savedStocks and add as rows to table body
     for (var i = 0; i < savedStocks.length; i++) {
         // Perform fetch api call to get company info by symbol
         var symbol = savedStocks[i].symbol;
-        var pricePaid = parseInt(savedStocks[i].pricePaid);
+        var pricePaid = parseFloat(savedStocks[i].pricePaid);
         var bgColor, textColor = "";
 
         // Lookup stock prices
@@ -119,19 +126,33 @@ var renderSavedStocks = async function () {
         stockRowEl.id = "stock-" + savedStocks[i].timestampAdded;
 
         // Add row contents
-        stockRowEl.innerHTML = "<td>" + symbol + "</td>"
-                                + "<td>" + savedStocks[i].corporation + "</td>"
+        stockRowEl.innerHTML = "<td><span class='view-stock-details' data-symbol='" + symbol + "'>" + symbol + "</span></td>"
+                                + "<td><span class='view-stock-details' data-symbol='" + symbol + "'>" + savedStocks[i].corporation + "</span></td>"
                                 + "<td>" + 
-                                "<input class='price-paid input-group-field' type='number' value='" + pricePaid.toFixed(2) +"' data-stock-id='" + savedStocks[i].timestampAdded + "'>" + 
+                                "<input class='price-paid input-group-field' type='number' value='" + pricePaid.toFixed(2) +"' data-stock-id='" + savedStocks[i].timestampAdded + "' step='0.01'>" + 
                                 "</td>"
                                 + "<td>" + stockQuoteInfo.c.toFixed(2)  + "</td>"
                                 + "<td class='bg-" + bgColor + "'><span class='days-gain'>" + daysGain + "%</span></td>"
                                 + "<td><span class='total-gain text-bold text-" + textColor + "'>" + totalGain + "</span></td>"
                                 + "<td><button class='remove-button remove-single' id='" + savedStocks[i].timestampAdded + "'>Remove</button></td>";
         
+        // update summary fields
+        sPricePaid = sPricePaid + pricePaid;
+        sCurrentPrice = sCurrentPrice + stockQuoteInfo.c;
+        sPreviousClose = sPreviousClose + stockQuoteInfo.pc;
+        
         // Append row to body
         tableBodyEl.appendChild(stockRowEl);
     }
+
+    // Add sumamry to table footer
+    tableFooterEl.innerHTML = "<tr><td colspan='2'>Portfolio Summary</td>"
+                                + "<td>" + sPricePaid.toFixed(2) + "</td>"
+                                + "<td>" + sCurrentPrice.toFixed(2) + "</td>"
+                                + "<td>" + ((sCurrentPrice - sPreviousClose) / sPreviousClose).toFixed(4) + "%</td>"
+                                + "<td>" + (sCurrentPrice - sPricePaid).toFixed(2) + "</td>"
+                                + "<td></td>";
+
 
     // hide/show elements based on savedStock array
     toggleHiddenElements();
@@ -190,9 +211,15 @@ var removeSingleStock = function (stockID) {
 }
 
 // Open stock details modal
-var viewStockDetails = async function (symbol) {
+var viewStockDetails = async function (symbol, addBtn) {
     // Show modal
     $('.ui.modal').modal('show');
+
+    if (!addBtn) {
+        addButtonEl.className = "ui green button hidden";
+    } else {
+        addButtonEl.className = "ui green button";
+    }
 
     // retrieve company name
     var compInfo = await getStockInfo("company-info", symbol);
@@ -269,11 +296,11 @@ function formSubmitHandler(event) {
     var searchTerm = searchInputEl.value.trim();
 
     //call function to get info from api and display it in modal
-    viewStockDetails(searchTerm);
+    viewStockDetails(searchTerm, true);
 }
 
-// Remove stock handler function
-var removeStockHandler = function (event) {
+// saved stock table handler function
+var tableStockHandler = function (event) {
     //prevent refreshing page
     event.preventDefault();
 
@@ -287,6 +314,9 @@ var removeStockHandler = function (event) {
     } else if (clickedItem.id === "clear-all") {
         // Remove all stocks
         removeAllStocks();
+    } else if (clickedItem.className.includes("view-stock-details")) {
+        // view selected stocks details in modal
+        viewStockDetails(clickedItem.getAttribute("data-symbol"), false);
     }
 }
 
@@ -305,9 +335,6 @@ var closeButtonHandler = function () {
 
 // Add change event listener to price paid input fields
 var editStockHandler = function(event) {
-    //prevent refreshing page
-    event.preventDefault();
-
     // Grab changed target
     var changedItem = event.target;
 
@@ -327,18 +354,20 @@ var editStockHandler = function(event) {
         // Update localStorage
         localStorage.setItem("stockPortfolio", JSON.stringify(savedStocks));
 
+
         // Render Saved Stocks
         renderSavedStocks();
     }
 }
 
+
 // Event listeners
 tableBodyEl.addEventListener("change", editStockHandler);
-tableEl.addEventListener("click", removeStockHandler);
+tableEl.addEventListener("click", tableStockHandler);
 addButtonEl.addEventListener("click", addButtonHandler)
 closeButtonEl.addEventListener("click", closeButtonHandler);
 searchFormEl.addEventListener("submit", formSubmitHandler); 
-
+refreshButtonEl.addEventListener("click", renderSavedStocks);
 
 // Render stocks on page load
 renderSavedStocks();

@@ -44,7 +44,10 @@
             </div>
             <div class="twelve wide column">
                 <section class="row mb">
-                    <h3 class="">My Stocks</h3>
+                    <h3 class="my-stocks">My Stocks</h3>
+                    <button class="ui button" id="refresh-button">
+                        <i class="fas fa-sync-alt"></i>
+                    </button>
                     <table class="ui celled table" id="saved-stock-table">
                         <thead>
                             <tr>
@@ -60,6 +63,9 @@
                         <tbody id="saved-stock-list">
                             
                         </tbody>
+                        <tfoot id="saved-stock-summary">
+                            
+                        </tfoot>
                     </table>
                     <h4 class="hidden" id="add-stock-message">Add stocks to your portfolio to view their information.</h4>
                 </section>
