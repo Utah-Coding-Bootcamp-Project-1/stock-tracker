@@ -266,7 +266,7 @@ var viewStockDetails = async function (symbol, addBtn) {
     // <iframe frameBorder='0' scrolling='no' width='800' height='420' src='https://api.stockdio.com/visualization/financial/charts/v1/HistoricalPrices?app-key=9FF1A978F5E24F84B3825CC1B09B2928&symbol=TSLA&dividends=true&splits=true&showLastPrice=false&palette=Financial-Light'></iframe>
 
     var stockGraph = document.createElement("div");
-    stockGraph.innerHTML = ""
+    modalGraphEl.innerHTML = "";
     stockGraph.innerHTML = "<iframe frameBorder='0' scrolling='no' width='100%' height='420' src='https://api.stockdio.com/visualization/financial/charts/v1/HistoricalPrices?app-key=9FF1A978F5E24F84B3825CC1B09B2928&symbol=" +
                             compInfo['ticker'] +
                             "&dividends=true&splits=true&showLastPrice=false&palette=Financial-Light'></iframe>";
