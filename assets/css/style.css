@@ -215,6 +215,10 @@ tfoot tr td:first-child {
   padding: 4px 4px 4px;
 }
 
+.mobile-table{
+  display: none;
+}
+
 @media only screen and (max-width: 990px) {
   .ui.grid>.stackable.stackable.row>.column, .ui.stackable.grid>.column.grid>.column, .ui.stackable.grid>.column.row>.column, .ui.stackable.grid>.column:not(.row), .ui.stackable.grid>.row>.column, .ui.stackable.grid>.row>.wide.column, .ui.stackable.grid>.wide.column {
     width: 100%!important;
@@ -256,5 +260,33 @@ tfoot tr td:first-child {
     position:relative;
     top:1px;
   }
+
+  #hide-table {
+    display: none!important;
+  }
+
+  .stock-table-mobile{
+    text-align: center;
+  }
+
+  .price-paid {
+    margin: 0 auto;
+    text-align: center;
+  }
+
+  .days-gain {
+    color: #595959;
+  }
   
+  .mobile-table{
+    display: inline;
+  }
+
+  .footer {
+    position: relative;
+  }
+
+  #saved-stock-summary{
+    text-align: center;
+  }
 }
