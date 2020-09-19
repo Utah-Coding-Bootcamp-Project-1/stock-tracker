@@ -151,8 +151,15 @@ tfoot tr td:first-child {
   text-emphasis: none;
   color: #595959;
 }
+
 .hidden {
   visibility: hidden;
+}
+
+.modal-error{
+  text-align: center;
+  text-emphasis: bold;
+  font-size: 16px;
 }
 
 
