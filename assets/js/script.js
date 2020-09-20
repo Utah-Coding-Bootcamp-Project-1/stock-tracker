@@ -175,12 +175,12 @@ var renderSavedStocks = async function () {
                                 +
                                 "<input class='price-paid input-group-field' type='number' value='" + pricePaid.toFixed(2) +"' data-stock-id='" + savedStocks[i].timestampAdded + "' step='0.01'>" + 
                                 "</td>" 
-                                + "<td>" + "<span class='mobile-table'>Current Price:</span>" + stockQuoteInfo.c.toFixed(2)  + "</td>"
+                                + "<td>" + "<span class='mobile-table'>Current Price:</span> $ " + stockQuoteInfo.c.toFixed(2)  + "</td>"
                                 + "<td class='bg-" + bgColor + "'>"
                                 + "<span class='mobile-table'>Days Gain:</span>"
-                                + "<span class='days-gain'>" + daysGain + "%</span></td>"
+                                + "<span class='days-gain'> $ " + daysGain + "%</span></td>"
                                 + "<td><span class='mobile-table'>Total Gain:</span>"
-                                + "<span class='total-gain text-bold text-" + textColor + "'>" + totalGain + "</span></td>"
+                                + "<span class='total-gain text-bold text-" + textColor + "'> $ " + totalGain + "</span></td>"
                                 + "<td><button class='remove-button remove-single' id='" + savedStocks[i].timestampAdded + "'>Remove</button></td>";
         stockRowEl.className = "stock-table-mobile";
         
@@ -195,10 +195,10 @@ var renderSavedStocks = async function () {
 
     // Add sumamry to table footer
     tableFooterEl.innerHTML = "<tr><td colspan='2'>Portfolio Summary</td>"
-                                + "<td>" + "<span class='mobile-table'>Price Paid: </span>" + sPricePaid.toFixed(2) + "</td>"
-                                + "<td>" + "<span class='mobile-table'>Current Price: </span>" + sCurrentPrice.toFixed(2) + "</td>"
+                                + "<td>" + "<span class='mobile-table'>Price Paid: </span> $ " + sPricePaid.toFixed(2) + "</td>"
+                                + "<td>" + "<span class='mobile-table'>Current Price: </span> $ " + sCurrentPrice.toFixed(2) + "</td>"
                                 + "<td>" + "<span class='mobile-table'>Days Gain: </span>" + ((sCurrentPrice - sPreviousClose) / sPreviousClose).toFixed(4) + "%</td>"
-                                + "<td>" + "<span class='mobile-table'>Total Gain: </span>" + (sCurrentPrice - sPricePaid).toFixed(2) + "</td>"
+                                + "<td>" + "<span class='mobile-table'>Total Gain: </span> $ " + (sCurrentPrice - sPricePaid).toFixed(2) + "</td>"
                                 + "<td></td>";
 
 
