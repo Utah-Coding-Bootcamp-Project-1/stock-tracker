@@ -370,6 +370,9 @@ function formSubmitHandler(event) {
     //get value from search field and trim it
     var searchTerm = searchInputEl.value.trim().toUpperCase();
 
+    // clear out search input for next search
+    searchInputEl.value = "";
+
     //call function to get info from api and display it in modal
     viewStockDetails(searchTerm, true);
 }
