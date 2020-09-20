@@ -27,6 +27,9 @@
 
    <!-- Main content area -->
    <div class="main-content-container">
+        <!-- Main Error Message Container -->
+        <div class="ui negative message hidden" id="main-error-message"></div>
+
         <div class="ui two column stackable padded grid">
             <div class="four wide column">
                 <aside class="">
@@ -93,6 +96,7 @@
 
         <div class="ui stackable padded grid">
             <section class="eight wide column">
+                <h3 class="modal-header">Stock Information</h3>
                 <table class="ui celled table">
                     <tr>
                         <td>Cost</td>
@@ -119,8 +123,13 @@
                 </div>
             </section>
             <section class="eight wide column">
+                <!-- Modal Related News Articles Container -->
+                <h3>Related News Articles</h3>
                 <div id="modal-news" class="ui celled stackable padded grid modal-news">
                 </div>
+
+                <!-- Modal Error Message Container -->
+                <div class="ui negative message hidden" id="modal-error-message"></div>
             </section>
         </div>
     </div>
