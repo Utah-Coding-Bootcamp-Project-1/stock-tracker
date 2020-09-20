@@ -65,13 +65,19 @@ var getStockInfo = function (reqType, symbol) {
                     resolve(result.json());
                 } else {
                     // display error message and prevent modal popup
-                    displayErrorMessage(mainErrorMessageEl, "Unable to find company info using the provided stock symbol.");
+                    if(result.status === 429) {
+                        displayErrorMessage(mainErrorMessageEl, "Reached limit of calls to Finnhub.io api. Please wait a minute and try again.");
+                    } else {
+                        displayErrorMessage(mainErrorMessageEl, "Unable to find company info using the provided stock symbol.");
+                    }
+                    // Reject result
                     reject("error");
                 }
             })
             .catch(function (error) {
                 // display error message and prevent modal popup
                 displayErrorMessage(mainErrorMessageEl, "Unable to find company info using the provided stock symbol.");
+                // Reject result
                 reject("error");
             });
     })
@@ -80,9 +86,9 @@ var getStockInfo = function (reqType, symbol) {
 // Search for related news articles
 var getRelatedArticles = function (searchTerm) {
     // Tokens
-    //var token = "0efe5784f39c90ff76da20274ced077a";
+    // var token = "0efe5784f39c90ff76da20274ced077a";
     // var token = "a5663e2b0a2d81f5f978eab1f9eb2415"
-    //var token = "a09f193a45eebc6dbb36b80db7999354"
+    // var token = "a09f193a45eebc6dbb36b80db7999354"
     var token = "0efe5784f39c90ff76da20274ced077a";
     var url = "https://gnews.io/api/v4/search?max=5&lang=en&q=" + searchTerm + "&token=" + token;
 
@@ -340,24 +346,30 @@ var viewStockDetails = async function (symbol, addBtn) {
     if(relatedArticles.totalArticles > 0) {
          // display related articles and images
         for (i=0; i < 3; i++) {
-            
+            // Add new row 
             var modalNewsRow = document.createElement("section")
             modalNewsRow.className = "row middle aligned";
 
+            // Add news article image
             var modalNewsImg = document.createElement("section");
             modalNewsImg.className = "six wide column";
             modalNewsImg.innerHTML = '<a href="' + relatedArticles.articles[i].url + '" target="_blank">' + '<img class= "ui rounded image" src= "' + relatedArticles.articles[i].image + '" width = 300>' + '</a>';
-        
+            
+            // Add news article text
             var modalNewsArticle = document.createElement("section");
             modalNewsArticle.className = "ten wide column";
-            modalNewsArticle.innerHTML ='<a href="' + relatedArticles.articles[i].url + '" target="_blank">' + relatedArticles.articles[i].description + '</a>';
+            modalNewsArticle.innerHTML = '<a href="' + relatedArticles.articles[i].url + '" target="_blank" class="article-text"><div class="ui row article-titles">'
+                             + '<h5>' + relatedArticles.articles[i].title + '</h5></div>' 
+                             + relatedArticles.articles[i].description + '</a>';
             
-            modalNewsRow.appendChild(modalNewsImg);
+            // Append article info to container
+            modalNewsRow.appendChild(modalNewsImg); 
             modalNewsRow.appendChild(modalNewsArticle);
 
             modalNews.appendChild(modalNewsRow);
         };
     } else {
+        // display error message
         displayErrorMessage(modalErrorMessageEl, "No related articles found.");
     }
 };
