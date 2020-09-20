@@ -163,6 +163,11 @@ tfoot tr td:first-child {
   font-size: 16px;
 }
 
+.modal-header{
+  margin-bottom: 0px;
+  margin-left: 2px;
+}
+
 
 
 
