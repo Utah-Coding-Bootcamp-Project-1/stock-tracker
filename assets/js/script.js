@@ -154,10 +154,10 @@ var renderSavedStocks = async function () {
 
     // Add sumamry to table footer
     tableFooterEl.innerHTML = "<tr><td colspan='2'>Portfolio Summary</td>"
-                                + "<td>" + "<td><span class='mobile-table'>Price Paid: </span>" + sPricePaid.toFixed(2) + "</td>"
-                                + "<td>" + "<td><span class='mobile-table'>Current Price: </span>" + sCurrentPrice.toFixed(2) + "</td>"
-                                + "<td>" + "<td><span class='mobile-table'>Days Gain: </span>" + ((sCurrentPrice - sPreviousClose) / sPreviousClose).toFixed(4) + "%</td>"
-                                + "<td>" + "<td><span class='mobile-table'>Total Gain: </span>" + (sCurrentPrice - sPricePaid).toFixed(2) + "</td>"
+                                + "<td>" + "<span class='mobile-table'>Price Paid: </span>" + sPricePaid.toFixed(2) + "</td>"
+                                + "<td>" + "<span class='mobile-table'>Current Price: </span>" + sCurrentPrice.toFixed(2) + "</td>"
+                                + "<td>" + "<span class='mobile-table'>Days Gain: </span>" + ((sCurrentPrice - sPreviousClose) / sPreviousClose).toFixed(4) + "%</td>"
+                                + "<td>" + "<span class='mobile-table'>Total Gain: </span>" + (sCurrentPrice - sPricePaid).toFixed(2) + "</td>"
                                 + "<td></td>";
 
 
