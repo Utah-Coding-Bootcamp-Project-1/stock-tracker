@@ -244,7 +244,6 @@ var removeSingleStock = function (stockID) {
             removeStock = i;
         }
     }
-    console.log(removeStock);
 
     // Remove stock from array
     if (removeStock >= 0) {
