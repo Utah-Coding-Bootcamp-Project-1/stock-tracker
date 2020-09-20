@@ -23,15 +23,15 @@ Utilizing two api services, GNews.io and Finnhub.io, users have the ability to s
 This application allows users to save stocks of interest to a locally stored portfolio to track their performance over time.  
 
 ## Other Infomration:
-GitHub Repository: https://utah-coding-bootcamp-project-1.github.io/stock-tracker/
+GitHub Repository: https://github.com/Utah-Coding-Bootcamp-Project-1/stock-tracker
 
 GitHub Published Site: https://utah-coding-bootcamp-project-1.github.io/stock-tracker/
 
 ## Empty Portfolio Page:
-![Working Project Screenshot](/empty-portfolio.PNG)
+![Working Project Screenshot](./assets/images/empty-portfolio.PNG)
 
 ## View Stock Details Page:
-![Working Project Screenshot](/stock-quote.PNG)
+![Working Project Screenshot](./assets/images/stock-quote.PNG)
 
 ## Main View with Stocks Page:
-![Working Project Screenshot](/main-view.PNG)
+![Working Project Screenshot](./assets/images/main-view.PNG)
