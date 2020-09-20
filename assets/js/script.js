@@ -178,7 +178,7 @@ var renderSavedStocks = async function () {
                                 + "<td>" + "<span class='mobile-table'>Current Price:</span> $ " + stockQuoteInfo.c.toFixed(2)  + "</td>"
                                 + "<td class='bg-" + bgColor + "'>"
                                 + "<span class='mobile-table'>Days Gain:</span>"
-                                + "<span class='days-gain'> $ " + daysGain + "%</span></td>"
+                                + "<span class='days-gain'>" + daysGain + "%</span></td>"
                                 + "<td><span class='mobile-table'>Total Gain:</span>"
                                 + "<span class='total-gain text-bold text-" + textColor + "'> $ " + totalGain + "</span></td>"
                                 + "<td><button class='remove-button remove-single' id='" + savedStocks[i].timestampAdded + "'>Remove</button></td>";
