@@ -88,6 +88,7 @@ tfoot tr td:first-child {
 /* ----- ticker and corporation selectors ----- */
 .view-stock-details {
   padding: 2px;
+  text-transform: uppercase;
 }
 .view-stock-details:hover {
   cursor: pointer;
