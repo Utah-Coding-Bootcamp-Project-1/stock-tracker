@@ -116,6 +116,12 @@ tfoot tr td:first-child {
 }
 
 
+/* ----- Add Stock Message Selector ----- */
+#add-stock-message {
+  color: #FD6D15;
+}
+
+
 /* ----- search field ----- */
 #searchTerm {
   font-weight: bold;

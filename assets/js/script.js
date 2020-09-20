@@ -86,10 +86,10 @@ var getStockInfo = function (reqType, symbol) {
 // Search for related news articles
 var getRelatedArticles = function (searchTerm) {
     // Tokens
-    // var token = "0efe5784f39c90ff76da20274ced077a";
-    // var token = "a5663e2b0a2d81f5f978eab1f9eb2415"
-    // var token = "a09f193a45eebc6dbb36b80db7999354"
-    var token = "0efe5784f39c90ff76da20274ced077a";
+    // var token = "0efe5784f39c90ff76da20274ced077a"; // Other API Key for backup
+    // var token = "a5663e2b0a2d81f5f978eab1f9eb2415" // Other API Key for backup
+    // var token = "a09f193a45eebc6dbb36b80db7999354" // Other API Key for backup
+    var token = "60f30f4d05199f4e0349a39b8a4c25b7";
     var url = "https://gnews.io/api/v4/search?max=5&lang=en&q=" + searchTerm + "&token=" + token;
 
     return new Promise(function (resolve, reject) {
