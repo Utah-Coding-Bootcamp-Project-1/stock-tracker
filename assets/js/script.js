@@ -64,10 +64,14 @@ var getStockInfo = function (reqType, symbol) {
                 if (result.ok) {
                     resolve(result.json());
                 } else {
+                    // display error message and prevent modal popup
+                    displayErrorMessage(mainErrorMessageEl, "Unable to find company info using the provided stock symbol.");
                     reject("error");
                 }
             })
             .catch(function (error) {
+                // display error message and prevent modal popup
+                displayErrorMessage(mainErrorMessageEl, "Unable to find company info using the provided stock symbol.");
                 reject("error");
             });
     })
@@ -88,10 +92,14 @@ var getRelatedArticles = function (searchTerm) {
                 if (result.ok) {
                     resolve(result.json());
                 } else {
+                    // dispaly error message and reject
+                    displayErrorMessage(modalErrorMessageEl, "No related articles found.");
                     reject("error");
                 }
             })
             .catch(function (error) {
+                // dispaly error message and reject
+                displayErrorMessage(modalErrorMessageEl, "No related articles found.");
                 reject("error");
             });
     });
@@ -361,6 +369,9 @@ function formSubmitHandler(event) {
 
     //get value from search field and trim it
     var searchTerm = searchInputEl.value.trim().toUpperCase();
+
+    // clear out search input for next search
+    searchInputEl.value = "";
 
     //call function to get info from api and display it in modal
     viewStockDetails(searchTerm, true);
