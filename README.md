@@ -17,12 +17,12 @@ Utilizing two api services, GNews.io and Finnhub.io, users have the ability to s
 
 ## API Resources
 * Finnhub.io - Endpoints used to return company info and company stock quotes
-* GNews - Enpoint used to return related news articles of searched company
+* GNews - Endpoint used to return related news articles of searched company
 
 ## Usage:
 This application allows users to save stocks of interest to a locally stored portfolio to track their performance over time.  
 
-## Other Infomration:
+## Other Information:
 GitHub Repository: https://github.com/Utah-Coding-Bootcamp-Project-1/stock-tracker
 
 GitHub Published Site: https://utah-coding-bootcamp-project-1.github.io/stock-tracker/
